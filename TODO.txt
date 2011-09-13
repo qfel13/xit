@@ -1,2 +1,19 @@
 ﻿TODO:
-undo - key U
+
+bugs:
+	set appropriate floor after leaving of player or block
+	decouple floors from objects
+
+features:
+	undo - key U
+	jump to level
+	save level in  (localStorage)
+	
+RESOLVED:
+bugs:
+	player can move 3 single
+	exit should be also floor
+	glue should stop blocks and sliders
+features:
+
+	

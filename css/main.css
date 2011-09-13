@@ -170,7 +170,7 @@ body {
 .M9 { /* BLOCK WEIGHT 3 WHEEL VERTICAL MAGNETIZED */
 	background: url("../i/d.png") -352px 100%, url("../i/d.png") -900px 100%;
 }
-.S0 { /* SLIDE */
+.S1 { /* SLIDE */
 	background: url("../i/d.png") -384px 100%, url("../i/d.png") -900px 100%;
 }
 .W1 { /* BLOCK WEIGHT 1 WHEEL HORIZONTAL */
@@ -216,7 +216,7 @@ body {
 .R0 { /* RADIOACTIVE */
 	background: url("../i/d.png") -1428px 100%, url("../i/d.png") -900px 100%;
 }
-.S1 { /* SNOW */
+.S4 { /* SNOW */
 	background: url("../i/d.png") -1460px 100%, url("../i/d.png") -900px 100%;
 }
 .T3 { /* TELEPORT IN BLOCK */

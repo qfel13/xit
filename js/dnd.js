@@ -3,6 +3,7 @@ var Xit = (function(document) {
 		levelSize = 20,
 		playerIndex,
 		infoDiv,
+		MAX_W = 3,
 		x = { 
 			levelSize: levelSize, 
 			m: []
@@ -10,7 +11,7 @@ var Xit = (function(document) {
 	
 	x.init = function() {
 		initDom();
-		x.cLevel = 1;
+		x.cLevel = 5;
 		x.loadCurrentLevel();
 	}
 	
@@ -289,15 +290,15 @@ var Xit = (function(document) {
 	}
 	
 	x.setInM = function (idObj, val) {
-		if (debug) { console.debug("setInM id", idObj); }
 		if (["F0", "G0", "I0", "O0", "T2", "T5"].indexOf(val.v) > -1) {
 			val.floor = true;
+			if(val.v === "G0") {
+				val.glue = true;
+			}
 		} else if (["B1", "B2", "B3", "M1", "M2", "M3", "M4", "M5", "M6", "M7", "M8", "M9"].indexOf(val.v) > -1) {
 			val.block = true;
-			fillW(val);
-		} else if(val.v === "S0") {
+		} else if(val.v === "S1") {
 			val.slider = true;
-			val.w = 1;
 		} else if(val.v === "T1") {
 			val.trap = true;
 		} else if(val.v === "E0") {
@@ -306,6 +307,14 @@ var Xit = (function(document) {
 		} else if (["C0", "H0", "M0", "P1", "P2", "W7"].indexOf(val.v) > -1) {
 			val.extra = true;
 		}
+		
+		// W
+		if (val.block || val.slider) {
+			if(!val.w) {
+				fillW(val);
+			}
+		}
+		
 		x.m[idObj.y*levelSize+idObj.x] = val;
 	}
 	x.setInM2 = function (index, val) {
@@ -337,19 +346,23 @@ var Xit = (function(document) {
 			if (!w) {
 				w = b.w;
 			}
-			if(w < 3) {
+			if(w < MAX_W) {
 				if (s.floor) {
-					x.setInM2(p, {v: "F0"});
-					x.setInM2(n, {v: b.v});
+					x.setInM2(p, {v: "F0"}); // TODO
+					if (s.glue) {
+						x.setInM2(n, {v: b.v, w: MAX_W + 1});
+					} else {
+						x.setInM2(n, {v: b.v});
+					}
 					return true;
 				} else if (s.trap) {
-					x.setInM2(p, {v: "F0"});
+					x.setInM2(p, {v: "F0"}); // TODO
 					x.setInM2(n, {v: "T5"});
 					return true;
 				} else if (s.block) {
 					w += s.w;
-					if (w < 3 && moveBlock(n, a)) {
-						x.setInM2(p, {v: "F0"});
+					if (w < MAX_W && moveBlock(n, a, w)) {
+						x.setInM2(p, {v: "F0"}); // TODO
 						x.setInM2(n, {v: b.v});
 						return true;
 					}
@@ -368,22 +381,28 @@ var Xit = (function(document) {
 		slider = x.m[p];
 		
 		if (slider && next) {
-			if (next.floor || next.trap) {
-				moved = true;
-				// check how far slider can go
-				while(next && (next.floor || next.trap)) {
-					i += a;
-					if (next.trap) {
-						trap = true;
-						break;
+			if (slider.w < MAX_W) {
+				if (next.floor || next.trap) {
+					moved = true;
+					// check how far slider can go
+					while(next && (next.floor || next.trap)) {
+						i += a;
+						if (next.trap) {
+							trap = true;
+							break;
+						}
+						next = x.m[i+a];
 					}
-					next = x.m[i+a];
+					
+					val = {v: slider.v};
+					if (trap) { val.v = "T5"; }
+					if (x.m[i].glue) {
+						val.w = MAX_W + 1;
+					}
+					
+					x.setInM2(p, {v: "F0"}); // TODO
+					x.setInM2(i, val);
 				}
-				x.setInM2(p, {v: "F0"});
-				v = slider.v;
-				if (trap) { v = "T5"; }
-				x.setInM2(i, {v: v});
-				
 			}
 		}
 		return moved
