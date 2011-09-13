@@ -9,6 +9,7 @@
 </head>
 <body>
 	<div id="exit"></div>
+	<div id="exit2"></div>
 	<div id="hud">
 		<div id="space1"></div>
 		<div id="space2"></div>

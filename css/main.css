@@ -5,76 +5,39 @@ body {
 	margin: 0;
 }
 
-@-moz-keyframes exitanim {
-	/*0% { background-position: 0px 32px; }
-	0.01% { background-position: -256px 32px; }
-	12.5% { background-position: -256px 32px; }
-	12.51% { background-position: -224px 32px; }
-	25% { background-position: -224px 32px; }
-	25.01% { background-position: -192px 32px; }
-	37.5% { background-position: -192px 32px; }
-	37.51% { background-position: -160px 32px; }
-	50% { background-position: -160px 32px; }
-	50.01% { background-position: -128px 32px; }
-	62.5% { background-position: -128px 32px; }
-	62.51% { background-position: -96px 32px; }
-	75% { background-position: -96px 32px; }
-	75.01% { background-position: -64px 32px; }
-	87.5% { background-position:  -64px 32px; }
-	87.51% { background-position: -32px 32px; }
-	99.99% { background-position: -32px 32px; }
-	100% { background-position: 0px 32px; }*/
-	0% { background-position: 0px 0; }
-	0.01% { background-position: -32px 0; }
-	12.5% { background-position: -32px 0; }
-	12.51% { background-position: -64px 0; }
-	25% { background-position: -64px 0; }
-	25.01% { background-position: -96px 0; }
-	37.5% { background-position: -96px 0; }
-	37.51% { background-position: -128px 0; }
-	50% { background-position: -128px 0; }
-	50.01% { background-position: -160px 0; }
-	62.5% { background-position: -160px 0; }
-	62.51% { background-position: -192px 0; }
-	75% { background-position: -192px 0; }
-	75.01% { background-position: -224px 0; }
-	87.5% { background-position: -224px 0; }
-	87.51% { background-position: -256px 0; }
-	99.99% { background-position: -256px 0; }
-	100% { background-position: 0px 0; }
+#info.error {
+	background: red;
 }
 
-@-webkit-keyframes exitanim {
-	0% { background-position: 0px 0; }
-	0.01% { background-position: -32px 0; }
-	12.5% { background-position: -32px 0; }
-	12.51% { background-position: -64px 0; }
-	25% { background-position: -64px 0; }
-	25.01% { background-position: -96px 0; }
-	37.5% { background-position: -96px 0; }
-	37.51% { background-position: -128px 0; }
-	50% { background-position: -128px 0; }
-	50.01% { background-position: -160px 0; }
-	62.5% { background-position: -160px 0; }
-	62.51% { background-position: -192px 0; }
-	75% { background-position: -192px 0; }
-	75.01% { background-position: -224px 0; }
-	87.5% { background-position: -224px 0; }
-	87.51% { background-position: -256px 0; }
-	99.99% { background-position: -256px 0; }
-	100% { background-position: 0px 0; }
+#info {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	min-width: 100px;
+	background: green;
+	color: #FFF;
+	font-family: "Courier";
+	display: none;
 }
 
 
 #exit {
+	display: none;
 	height: 32px;
 	width: 32px;
 	background: #000;
 	background: url("../i/exit1.png") 0px 32px;
-	-webkit-animation: exitanim 1.3s infinite;
-	-webkit-animation-timing-function: linear;
-	-moz-animation: exitanim 1.3s infinite;
-	-moz-animation-timing-function: linear;
+	-webkit-animation: exitanim 1.3s linear infinite;
+	-moz-animation: exitanim 1.3s linear infinite;
+}
+#exit2 {
+	display: none;
+	height: 32px;
+	width: 32px;
+	background: #000;
+	background: url("../i/exit1.png") 0px 32px;
+	-webkit-animation: exit2anim 1.3s steps(8, end) infinite;
+	-moz-animation: exit2anim 1.3s steps(8, end) infinite;
 }
 
 #hud {
@@ -108,20 +71,24 @@ body {
 	left: 14px;
 }
 
-#container {
-	position: relative;
-	/* background-color: rgba(255,255,255, 0.7); */
-	/*background-color: rgba(0, 0, 0, 1);*/
-	height: 800px;
-	z-index: 1000;
-}
-
-/* FLOORS */
 .D0 { /* DOOR */
 	background: url("../i/d.png") -1252px 120%, url("../i/d.png") -900px 100%;
 }
+
+/* FLOORS */
+@-moz-keyframes exit {
+	from { background-position: 0px 100%; }
+	to { background-position: -256px 100%; }
+}
+@-webkit-keyframes exit {
+	from { background-position: 0px 100%; }
+	to { background-position: -256px 100%; }
+}
+
 .E0 { /* EXIT */
-	background: url("../i/d.png") -964px 100%;
+	background: url("../i/exit2.png") 0px 100%;
+	-webkit-animation: exit 1.3s steps(8, end) infinite;
+	-moz-animation: exit 1.3s steps(8, end) infinite;
 }
 .E1 { /* ELECTICITY */
 	background: url("../i/d.png") -932px 100%;
@@ -144,8 +111,18 @@ body {
 .T1 { /* TRAP OPEN */
 	background: url("../i/d.png") -1124px 100%;
 }
+@-moz-keyframes trapclose {
+	from { background-position: 0px 100%; }
+	to { background-position: -192px 100%; }
+}
+@-webkit-keyframes trapclose {
+	from { background-position: 0px 100%; }
+	to { background-position: -192px 100%; }
+}
 .T5 { /* TRAP CLOSED */
-	background: url("../i/d.png") -900px 100%; /* TODO: trap closed not floor */
+	background: url("../i/trap1.png") -192px 100%;
+	-webkit-animation: trapclose 0.3s steps(6, end) 1;
+	-moz-animation: trapclose 0.3s steps(6, end) 1;
 }
 .T2 { /* TWISTER */
 	background: url("../i/d.png") -1156px 100%;
@@ -232,6 +209,9 @@ body {
 }
 .P4 { /* PLAYER ON EXIT */
 	background: url("../i/d.png") -1396px 100%, url("../i/d.png") -964px 100%;
+}
+.P5 { /* PLAYER ON TRAP */
+	background: url("../i/d.png") -1396px 100%, url("../i/d.png") -1124px 100%;
 }
 .R0 { /* RADIOACTIVE */
 	background: url("../i/d.png") -1428px 100%, url("../i/d.png") -900px 100%;

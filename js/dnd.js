@@ -2,6 +2,7 @@ var Xit = (function(document) {
 	var debug = false,
 		levelSize = 20,
 		playerIndex,
+		infoDiv,
 		x = { 
 			levelSize: levelSize, 
 			m: []
@@ -92,7 +93,11 @@ var Xit = (function(document) {
 			}
 		}
 		
+		infoDiv = document.createElement("div"),
+		infoDiv.id = "info";
+		
 		document.body.appendChild(renderBoard);
+		document.body.appendChild(infoDiv);
 	}
 	
 	function checkIndexes(notNulls, nulls, a) {
@@ -297,6 +302,7 @@ var Xit = (function(document) {
 			val.trap = true;
 		} else if(val.v === "E0") {
 			val.exit = true;
+			val.floor = true;
 		} else if (["C0", "H0", "M0", "P1", "P2", "W7"].indexOf(val.v) > -1) {
 			val.extra = true;
 		}
@@ -387,7 +393,13 @@ var Xit = (function(document) {
 		var n = playerIndex + a,
 		s = x.m[n];
 		if (s) {
-			if (s.floor) {
+			if (s.exit) {
+				x.setInM2(playerIndex, {v:"F0"});
+				x.setInM2(n, {v: "P4"});
+				playerIndex = n;
+				info("Level " + x.cLevel + " completed!");
+				x.loadNextLevel();
+			} else if (s.floor) {
 				x.setInM2(playerIndex, {v:"F0"}); // TODO
 				x.setInM2(n, {v:"P0"});
 				playerIndex = n;
@@ -409,16 +421,23 @@ var Xit = (function(document) {
 				x.setInM2(n, {v:"P0"});
 				playerIndex = n;
 			} else if (s.trap) {
-				alert("Ehh");
+				info("Try one more time", true);
 				x.restartLevel();
-			} else if (s.exit) {
-				x.setInM2(playerIndex, {v:"F0"});
-				x.setInM2(n, {v: "P4"});
-				playerIndex = n;
-				alert("Level " + x.cLevel + " completed!");
-				x.loadNextLevel();
 			}
 		}
+	}
+	
+	function info(s, e) {
+		if (e) {
+			infoDiv.className = "error";
+		} else {
+			infoDiv.className = "";
+		}
+		infoDiv.innerHTML = s;
+		infoDiv.style.display = "block";
+		setTimeout(function() {
+			infoDiv.style.display = "none";
+		}, 1000);
 	}
 	
 	x.left = function() {
@@ -458,6 +477,10 @@ document.addEventListener("DOMContentLoaded", function () {
 			Xit.down();
 			p = !0;
 		} else if (k == 78/* && ctrl*/) {
+			Xit.loadCurrentLevel();
+			p = !0;
+		} else if (k >= 49 && k <= 57) {
+			Xit.cLevel = k - 48;
 			Xit.loadCurrentLevel();
 			p = !0;
 		}
