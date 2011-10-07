@@ -17,7 +17,7 @@ var Xit = (function(document) {
 		initDom();
 		x.cLevel = 10;
 		x.loadCurrentLevel();
-	}
+	};
 	
 	function loadFromString(s) {
 		var i,j,l,k,line,lines,className,render, v, version;
@@ -50,7 +50,7 @@ var Xit = (function(document) {
 	x.loadLevel = function(ln) {
 		var xhr = new XMLHttpRequest(), ls;
 		ls = (ln > 9 ? "": "0") + ln;
-		xhr.open("GET", "/levels/0" + ls + ".txt", true);
+		xhr.open("GET", "levels/0" + ls + ".txt", true);
 		xhr.onreadystatechange = function (aEvt) {
 			if (xhr.readyState === 4) {
 				if(xhr.status === 200) {
@@ -62,22 +62,22 @@ var Xit = (function(document) {
 			}
 		};
 		xhr.send(null);
-	}
+	};
 	
 	x.restartLevel = function() {
 		loadFromString(x.cLevelStr);
-	}
+	};
 	
 	x.loadCurrentLevel = function() {
 		//~~(Math.random()*14 + 1);
 		x.loadLevel(x.cLevel);
-	}
+	};
 	
 	x.loadNextLevel = function() {
 		x.cLevel += 1;//~~(Math.random()*14 + 1);
 		x.loadLevel(x.cLevel);
-	}
-	
+	};
+    
 	//TODO change this x or above x
 	function createDiv(x, y, prefix, append) {
 		var div = document.createElement("div");
@@ -150,7 +150,7 @@ var Xit = (function(document) {
 			}
 		}
 		
-		infoDiv = document.createElement("div"),
+		infoDiv = document.createElement("div");
 		infoDiv.id = "info";
 		
 		document.body.appendChild(renderBoard);
@@ -380,16 +380,16 @@ var Xit = (function(document) {
 			items[itemCount] = item;
 			itemCount += 1;
 		}
-	}
+	};
 	// for (var i =0, l = a.length; i <l; i++) { a[i].classList.remove("F0"); }
 	
 	x.isFloor = function (v) {
 		return ["E0", "F0", "G0", "I0", "O0", "T2", "T5"].indexOf(v) > -1;
-	}
+	};
 	
 	x.isTrap = function (v) {
 		return v === "T1";
-	}
+	};
 	
 	x.setInM = function (index, val) {
 		if (["F0", "G0", "I0", "O0", "T2", "T5"].indexOf(val.v) > -1) {
@@ -423,13 +423,14 @@ var Xit = (function(document) {
 		}
 		
 		x.m[index] = val;
-	}
+	};
+    
 	x.setInM2 = function (index, val) {
 		var j = (index % levelSize), i = ~~(index/levelSize); // TODO change it !!!
 		x.setInM(index, val);
 		render = document.getElementById("render_" + j + "_" + i);
 		render.className = "render " + val.v;
-	}
+	};
 	
 	x.getFromM = function(idObj) {
 		if (idObj.x < 0 || idObj.x >= levelSize || idObj.y < 0 || idObj.y >= levelSize) {
@@ -438,11 +439,11 @@ var Xit = (function(document) {
 		var a = x.m[idObj.y*levelSize+idObj.x],v;
 		
 		if (a) {
-			v=a.v
+			v=a.v;
 		}
 		// console.debug(a, v);
 		return v;
-	}
+	};
 	
 	function moveBlock(p, a, w) {
 		var n = p + a,
@@ -484,7 +485,7 @@ var Xit = (function(document) {
 	function moveSlider(p, a, w) {
 		var v, n = p + a, 
 		moved = false,
-		trap = false;
+		trap = false,
 		i = p,
 		next = x.m[n],
 		slider = x.m[p];
@@ -514,7 +515,7 @@ var Xit = (function(document) {
 				}
 			}
 		}
-		return moved
+		return moved;
 	}
 	
 	function move(a) {
@@ -605,16 +606,16 @@ var Xit = (function(document) {
 	
 	x.left = function() {
 		move(-1);
-	}
+	};
 	x.right = function() {
 		move(1);
-	}
+	};
 	x.up = function() {
 		move(-levelSize);
-	}
+	};
 	x.down = function() {
 		move(levelSize);
-	}
+	};
 	
 	return x;
 })(document);
@@ -654,6 +655,6 @@ document.addEventListener("DOMContentLoaded", function () {
 			p = !0;
 		}
 		
-		p && event.preventDefault();
+		if (p) { event.preventDefault(); }
 	}, false);
 }, false);
