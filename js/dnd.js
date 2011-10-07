@@ -1,41 +1,50 @@
 var Xit = (function(document) {
 	var debug = false,
 		levelSize = 20,
-		playerIndex,
 		infoDiv,
 		MAX_W = 3,
+		itemCount = 0,
+		items = [],
 		x = { 
 			levelSize: levelSize, 
-			m: []
+			m: [],
+			b: [],
+			p: []
+			/*playerIndex*/
 		};
 	
 	x.init = function() {
 		initDom();
-		x.cLevel = 5;
+		x.cLevel = 10;
 		x.loadCurrentLevel();
 	}
 	
 	function loadFromString(s) {
-		var i,j,l,k,line,lines,className,render, v;
+		var i,j,l,k,line,lines,className,render, v, version;
 
 			x.m.length = 0;
+			cleanItems();
+			
 			lines = s.split("\n");
+			version = lines.shift();
+			console.debug("vesrion", version);
 			for (i = 0, k = lines.length; i < k; i += 1) {
 				line = lines[i];
 				for (j = 0, l = line.length/2; j < l; j += 1) {
 					className = line[2*j] + line[2*j+1];
 					if (className !== "00") {
-						v = {v:className};
-						x.setInM({"x": j, "y": i}, v);
-						render = document.getElementById("render_" + j + "_" + i);
-						render.className = "render " + className;
-						if (className === "P0") {
-							playerIndex = i*levelSize + j;
-						}
+						x.set(j, i, className);
 					}
 				}
 			}
 			checkAllWalls();
+	}
+	
+	function cleanItems() {
+		for (var i = 0; i < itemCount; i++) {
+			removeFromBoard(items[i]);
+		}
+		itemCount = 0;
 	}
 	
 	x.loadLevel = function(ln) {
@@ -69,6 +78,47 @@ var Xit = (function(document) {
 		x.loadLevel(x.cLevel);
 	}
 	
+	//TODO change this x or above x
+	function createDiv(x, y, prefix, append) {
+		var div = document.createElement("div");
+		div.id = prefix + (append ? (x + "_" + y) : "");
+		
+		divStyle(x, y, div);
+		
+		return div;
+	}
+	
+	function divStyle(x, y, div) {
+		div.style.left = 30 * x + "px";
+		div.style.top = 32*y + "px";
+		div.style.zIndex = y;
+	}
+	
+	function divStyle2(index, div) {
+		var x = (index % levelSize), y = ~~(index/levelSize); // TODO change it !!!
+		// divStyle(x, y, div);
+		div.style.left = 30 * x + "px";
+		div.style.top = 32*y + "px";
+	}
+	
+	function addToBoard(render, renderBoard) {
+		renderBoard = renderBoard || document.getElementById("renderBoard");
+		if (renderBoard) {
+			renderBoard.appendChild(render);
+		} else {
+			console.warn("!renderBoard");
+		}
+	}
+	function removeFromBoard(render, renderBoard) {
+		renderBoard = renderBoard || document.getElementById("renderBoard");
+		if (renderBoard) {
+			renderBoard.removeChild(render);
+		} else {
+			console.warn("!renderBoard");
+		}
+	}
+	
+	
 	/**
 	 * DOM initialization.
 	 * @private
@@ -76,21 +126,27 @@ var Xit = (function(document) {
 	 */
 	function initDom(size) {
 		var renderBoard = document.createElement("div"),
-			render, i, j;
+			i, j;
 		size = size || levelSize;
 		renderBoard.id = "renderBoard";
 		renderBoard.style.width = 30 * size + "px";
 		renderBoard.style.height = 32 * size + "px";
 		
+		renderBoard.addEventListener("webkitTransitionEnd", function(event) {
+			var t = event.target;
+			console.log("transitionEnd", t);
+			var z = t.getAttribute("z");
+			console.log("z", z);
+			t.removeAttribute("z");
+			if (z) {
+				t.style.zIndex = z;	
+			}
+		}, false);
+		
 		// console.debug("size =", size);
-		for (i = -1; i <= size; i+=1) {
-			for (j = -1; j <= size; j+=1) {
-				render = document.createElement("div");
-				render.id = "render_" + i + "_" + j;
-				render.style.left = 30*i + "px";
-				render.style.top = 32*j + "px";
-				render.style.zIndex = j;
-				renderBoard.appendChild(render);
+		for (j = -1; j <= size; j+=1) {
+			for (i = -1; i <= size; i+=1) {
+				addToBoard(createDiv(i, j, "render_", true), renderBoard);
 			}
 		}
 		
@@ -289,16 +345,67 @@ var Xit = (function(document) {
 		}
 	}
 	
-	x.setInM = function (idObj, val) {
+	x.set = function (mx, my, className) {
+		var index = my * levelSize + mx,
+			val = {};
+		if (!className) {
+			console.warn("!className");
+			return;
+		}
+		
+		val.v = className;
+		if (x.isFloor(className) || x.isTrap(className)) {
+		
+			x.setInM(index, val);
+			
+			render = document.getElementById("render_" + mx + "_" + my);
+			if (!render) { 
+				console.warn("render_" + mx + "_" + my);
+			} else {
+				render.className = "render " + val.v;
+			}
+		} else {
+			x.b[index] = val;
+			x.setInM(index, {v:"F0"});
+			//TODO:
+			render = document.getElementById("render_" + mx + "_" + my);
+			render.className = "render F0"/* + val.v*/;
+			var item = createDiv(mx, my, "item_" + itemCount, false, my);
+			item.className = "item " + className;
+			addToBoard(item);
+			if (className === "P0") {
+				x.p.push({item: item, index: index});
+				x.playerIndex = index;
+			}
+			items[itemCount] = item;
+			itemCount += 1;
+		}
+	}
+	// for (var i =0, l = a.length; i <l; i++) { a[i].classList.remove("F0"); }
+	
+	x.isFloor = function (v) {
+		return ["E0", "F0", "G0", "I0", "O0", "T2", "T5"].indexOf(v) > -1;
+	}
+	
+	x.isTrap = function (v) {
+		return v === "T1";
+	}
+	
+	x.setInM = function (index, val) {
 		if (["F0", "G0", "I0", "O0", "T2", "T5"].indexOf(val.v) > -1) {
 			val.floor = true;
-			if(val.v === "G0") {
+			val.f = val.v;
+			if (val.v === "G0") {
 				val.glue = true;
+			} else if (val.v === "I0") {
+				val.ice = true;
 			}
 		} else if (["B1", "B2", "B3", "M1", "M2", "M3", "M4", "M5", "M6", "M7", "M8", "M9"].indexOf(val.v) > -1) {
 			val.block = true;
+			val.b = val.v;
 		} else if(val.v === "S1") {
 			val.slider = true;
+			val.b = val.v;
 		} else if(val.v === "T1") {
 			val.trap = true;
 		} else if(val.v === "E0") {
@@ -315,11 +422,11 @@ var Xit = (function(document) {
 			}
 		}
 		
-		x.m[idObj.y*levelSize+idObj.x] = val;
+		x.m[index] = val;
 	}
 	x.setInM2 = function (index, val) {
-		var j = (index % levelSize), i = ~~(index/levelSize);
-		x.setInM({"x": j, "y": i}, val);
+		var j = (index % levelSize), i = ~~(index/levelSize); // TODO change it !!!
+		x.setInM(index, val);
 		render = document.getElementById("render_" + j + "_" + i);
 		render.className = "render " + val.v;
 	}
@@ -351,6 +458,8 @@ var Xit = (function(document) {
 					x.setInM2(p, {v: "F0"}); // TODO
 					if (s.glue) {
 						x.setInM2(n, {v: b.v, w: MAX_W + 1});
+					// } else if (s.ice) {
+						
 					} else {
 						x.setInM2(n, {v: b.v});
 					}
@@ -409,39 +518,74 @@ var Xit = (function(document) {
 	}
 	
 	function move(a) {
-		var n = playerIndex + a,
-		s = x.m[n];
+		var n = x.playerIndex + a,
+		b,
+		s = x.m[n]; // floor
 		if (s) {
-			if (s.exit) {
-				x.setInM2(playerIndex, {v:"F0"});
-				x.setInM2(n, {v: "P4"});
-				playerIndex = n;
-				info("Level " + x.cLevel + " completed!");
-				x.loadNextLevel();
-			} else if (s.floor) {
-				x.setInM2(playerIndex, {v:"F0"}); // TODO
-				x.setInM2(n, {v:"P0"});
-				playerIndex = n;
-			} else if (s.block) {
-				if (moveBlock(n, a)) {
-					x.setInM2(playerIndex, {v:"F0"});
+			b = x.b[n];
+			// console.log(s, s.floor);
+			if (b) {
+				// console.log("b", b);
+				if (b.block) {
+					if (moveBlock(n, a)) {
+						x.setInM2(x.playerIndex, {v:"F0"});
+						x.setInM2(n, {v:"P0"});
+						x.playerIndex = n;
+					}
+				} else if (s.slider) {
+					if (moveSlider(n,a)) {
+						x.setInM2(x.playerIndex, {v:"F0"});
+						x.setInM2(n, {v:"P0"});
+						x.playerIndex = n;
+					}
+				} else if (s.extra) {
+					// pickExtra(s); // TODO
+					x.setInM2(x.playerIndex, {v:"F0"});
 					x.setInM2(n, {v:"P0"});
-					playerIndex = n;
+					x.playerIndex = n;
 				}
-			} else if (s.slider) {
-				if (moveSlider(n,a)) {
-					x.setInM2(playerIndex, {v:"F0"});
+			} else {
+				if (s.exit) {
+					// x.setInM2(x.playerIndex, {v:"F0"});
+					
+					x.setInM2(n, {v: "P4"});
+					x.playerIndex = n;
+					info("Level " + x.cLevel + " completed!");
+					x.loadNextLevel();
+				} else if (s.floor) {
+					// console.log(s.floor);
+					var item = x.p[0].item, z = ~~(n/levelSize);
+					
+					if (a == -levelSize) {
+						item.setAttribute("z", z);
+					} else {
+						item.style.zIndex = z;
+					}
+					divStyle2(n, x.p[0].item);
+					x.b[n] = x.b[x.playerIndex];
+					delete x.b[x.playerIndex];
+					x.playerIndex = n;
+				/*} else if (s.block) {
+					if (moveBlock(n, a)) {
+						x.setInM2(x.playerIndex, {v:"F0"});
+						x.setInM2(n, {v:"P0"});
+						x.playerIndex = n;
+					}
+				} else if (s.slider) {
+					if (moveSlider(n,a)) {
+						x.setInM2(x.playerIndex, {v:"F0"});
+						x.setInM2(n, {v:"P0"});
+						x.playerIndex = n;
+					}
+				} else if (s.extra) {
+					// pickExtra(s); // TODO
+					x.setInM2(x.playerIndex, {v:"F0"});
 					x.setInM2(n, {v:"P0"});
-					playerIndex = n;
+					x.playerIndex = n;*/
+				} else if (s.trap) {
+					info("Try one more time", true);
+					x.restartLevel();
 				}
-			} else if (s.extra) {
-				// pickExtra(s); // TODO
-				x.setInM2(playerIndex, {v:"F0"});
-				x.setInM2(n, {v:"P0"});
-				playerIndex = n;
-			} else if (s.trap) {
-				info("Try one more time", true);
-				x.restartLevel();
 			}
 		}
 	}
@@ -481,7 +625,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	Xit.init();
 	
 	document.addEventListener("keydown", function(event){
-		var k = event.keyCode, i, p = false, ctrl = event.ctrlKey;
+		var k = event.keyCode, i, p = false, ctrl = event.ctrlKey, shift = event.shiftKey, level;
 		// console.log("k =", k, "ctrl =", ctrl);
 		if (k == 37) { // left
 			Xit.left();
@@ -495,10 +639,16 @@ document.addEventListener("DOMContentLoaded", function () {
 		} else if (k == 40) { //down
 			Xit.down();
 			p = !0;
-		} else if (k == 78/* && ctrl*/) {
+		} else if (k == 78 && !ctrl && !shift) { // n
 			Xit.loadCurrentLevel();
 			p = !0;
-		} else if (k >= 49 && k <= 57) {
+		} else if (k == 79 && !ctrl && !shift) { // o
+			level = prompt("Level number (1 - 14)?", 1);
+			if (level) {
+				Xit.loadLevel(level);
+				p = !0;
+			}
+		} else if (k >= 49 && k <= 57 && !ctrl && !shift) {
 			Xit.cLevel = k - 48;
 			Xit.loadCurrentLevel();
 			p = !0;

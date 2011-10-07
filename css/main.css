@@ -205,7 +205,7 @@ body {
 	background: url("../i/d.png") -1364px 100%, url("../i/d.png") -900px 100%;
 }
 .P0 { /* PLAYER */
-	background: url("../i/d.png") -1396px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -1396px 100%/*, url("../i/d.png") -900px 100%*/;
 }
 .P4 { /* PLAYER ON EXIT */
 	background: url("../i/d.png") -1396px 100%, url("../i/d.png") -964px 100%;
@@ -246,6 +246,11 @@ body {
 }
 .W7 { /* WHEEL */
 	background: url("../i/d.png") -860px 100%, url("../i/d.png") -900px 100%;
+}
+
+.item {
+	-webkit-transition: left .3s, top .3s/*, z-index .5s*/;
+	-moz-transition: left .3s, top .3s/*, z-index .5s*/;
 }
 
 #renderBoard {

@@ -8,6 +8,10 @@ features:
 	undo - key U
 	jump to level
 	save level in  (localStorage)
+	animation for player
+	animation for slider
+	animation for blocks
+	player showing at the beginning
 	
 RESOLVED:
 bugs:
