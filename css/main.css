@@ -3,6 +3,27 @@ body {
 	background-color: #400000;
 	color: #FFF;
 	margin: 0;
+	height: 100%;
+	/* overflow: hidden; /* TODO remove this */
+}
+
+#help {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	width: 200px;
+	background-color: #7F2100; /* fallback */
+	background-color: rgba(255, 255, 255, 0.5);
+	font-family: "Courier";
+	font-size: 12px;
+	color: white;
+	padding: 5px;
+}
+#help > .title {
+	background: #400000;
+	color: white;
+	font-weight: bold;
+	text-align: center;
 }
 
 #info.error {
@@ -20,26 +41,6 @@ body {
 	display: none;
 }
 
-
-#exit {
-	display: none;
-	height: 32px;
-	width: 32px;
-	background: #000;
-	background: url("../i/exit1.png") 0px 32px;
-	-webkit-animation: exitanim 1.3s linear infinite;
-	-moz-animation: exitanim 1.3s linear infinite;
-}
-#exit2 {
-	display: none;
-	height: 32px;
-	width: 32px;
-	background: #000;
-	background: url("../i/exit1.png") 0px 32px;
-	-webkit-animation: exit2anim 1.3s steps(8, end) infinite;
-	-moz-animation: exit2anim 1.3s steps(8, end) infinite;
-}
-
 #hud {
 	background-color: #000;
 	background: url("../i/hud_bot.png") no-repeat left, url("../i/hud_bg2.png") repeat left;
@@ -51,24 +52,57 @@ body {
 	height: 47px;
 	z-index: 10000;
 }
-#space1, #space2, #space3, #space4{
+
+#extra0, #extra1, #extra2, #extra3{
 	position: absolute;
 	width: 32px;
 	height: 30px;
+	bottom: 6px;
+	border: 2px transparent solid;
+}
+#energy {
+	bottom: 23px;
+	left: 500px;
+	background: black;
+	border: orange;
+	width: 100px;
+	height: 10px;
+	position: absolute;
+}
+#time {
 	bottom: 8px;
+	left: 599px;
+	background: black;
+	border: orange;
+	width: 1px;
+	height: 10px;
+	position: absolute;
 }
-#space4 {
-	left: 158px;
+#extra0.active , #extra1.active , #extra2.active , #extra3.active {
+	-webkit-animation: extra-active .4s steps(2, end) infinite;
+	-moz-animation: extra-active .4s steps(2, end) infinite;
 }
-#space3 {
-	left: 110px;
+
+#extra3 {
+	left: 156px;
 }
-#space2 {
-	left: 62px;
+#extra2 {
+	left: 108px;
 }
-#space1 {
-	background: url("../i/d.png") -732px 100%;
-	left: 14px;
+#extra1 {
+	left: 60px;
+}
+#extra0{
+	left: 12px;
+}
+
+@-moz-keyframes extra-active {
+	from { border-color: orange; }
+	to { border-color: transparent; }
+}
+@-webkit-keyframes extra-active {
+	from { border-color: orange; }
+	to { border-color: transparent; }
 }
 
 .D0 { /* DOOR */
@@ -95,6 +129,9 @@ body {
 }
 .F0 { /* FLOOR */
 	background: url("../i/d.png") -900px 100%;
+}
+.F1 { /* FLOOR AFTER BOMB */
+	background: url("../i/afterbomb.png") 0px 100%;
 }
 .G0 { /* GLUE */
 	background: url("../i/d.png") -996px 100%;
@@ -135,127 +172,160 @@ body {
 }
 /* BLOCKS */
 .B1 { /* BLOCK WEIGHT 1 */
-	background: url("../i/d.png") 0 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") 0 100%;
 }
 .B2 { /* BLOCK WEIGHT 2 */
-	background: url("../i/d.png") -32px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -32px 100%;
 }
 .B3 { /* BLOCK WEIGHT 3 */
-	background: url("../i/d.png") -64px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -64px 100%;
 }
 .M1 { /* BLOCK WEIGHT 1 MAGNETIZED */
-	background: url("../i/d.png") -96px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -96px 100%;
 }
 .M2 { /* BLOCK WEIGHT 2 MAGNETIZED */
-	background: url("../i/d.png") -128px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -128px 100%;
 }
 .M3 { /* BLOCK WEIGHT 1 MAGNETIZED */
-	background: url("../i/d.png") -160px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -160px 100%;
 }
 .M4 { /* BLOCK WEIGHT 1 WHEEL HORIZONTAL MAGNETIZED */
-	background: url("../i/d.png") -192px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -192px 100%;
 }
 .M5 { /* BLOCK WEIGHT 2 WHEEL HORIZONTAL MAGNETIZED */
-	background: url("../i/d.png") -224px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -224px 100%;
 }
 .M6 { /* BLOCK WEIGHT 3 WHEEL HORIZONTAL MAGNETIZED */
-	background: url("../i/d.png") -256px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -256px 100%;
 }
 .M7 { /* BLOCK WEIGHT 1 WHEEL VERTICAL MAGNETIZED */
-	background: url("../i/d.png") -288px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -288px 100%;
 }
 .M8 { /* BLOCK WEIGHT 2 WHEEL VERTICAL MAGNETIZED */
-	background: url("../i/d.png") -320px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -320px 100%;
 }
 .M9 { /* BLOCK WEIGHT 3 WHEEL VERTICAL MAGNETIZED */
-	background: url("../i/d.png") -352px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -352px 100%;
 }
 .S1 { /* SLIDE */
-	background: url("../i/d.png") -384px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -384px 100%;
 }
 .W1 { /* BLOCK WEIGHT 1 WHEEL HORIZONTAL */
-	background: url("../i/d.png") -416px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -416px 100%;
 }
 .W2 { /* BLOCK WEIGHT 2 WHEEL HORIZONTAL */
-	background: url("../i/d.png") -448px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -448px 100%;
 }
 .W3 { /* BLOCK WEIGHT 3 WHEEL HORIZONTAL */
-	background: url("../i/d.png") -480px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -480px 100%;
 }
 .W4 { /* BLOCK WEIGHT 1 WHEEL VERTICAL */
-	background: url("../i/d.png") -512px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -512px 100%;
 }
 .W5 { /* BLOCK WEIGHT 2 WHEEL VERTICAL */
-	background: url("../i/d.png") -544px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -544px 100%;
 }
 .W6 { /* BLOCK WEIGHT 3 WHEEL VERTICAL */
-	background: url("../i/d.png") -576px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -576px 100%;
 }
-.B4 { /* WALL BLOCK BLOWABLE */
+.B9 { /* WALL BLOCK BLOWABLE */
 	background: url("../i/d.png") -608px 100%;
 }
 /* OBJECTS */
-.B9 { /* BOMB */
-	background: url("../i/d.png") -1300px 100%, url("../i/d.png") -900px 100%;
+.B0 { /* BOMB */
+	background: url("../i/d.png") -1300px 100%;
 }
 .E2 { /* ELECTOMAGNET HORIZONTAL */
-	background: url("../i/d.png") -1332px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -1332px 100%;
 }
 .E3 { /* ELECTOMAGNET VERTICAL */
-	background: url("../i/d.png") -1364px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -1364px 100%;
 }
 .P0 { /* PLAYER */
-	background: url("../i/d.png") -1396px 100%/*, url("../i/d.png") -900px 100%*/;
+	background: url("../i/d.png") -1396px 100%;
 }
-.P4 { /* PLAYER ON EXIT */
-	background: url("../i/d.png") -1396px 100%, url("../i/d.png") -964px 100%;
+
+@-moz-keyframes player-down {
+	from { background-position: 0px 0px; }
+	to { background-position: -224px 0px; }
 }
-.P5 { /* PLAYER ON TRAP */
-	background: url("../i/d.png") -1396px 100%, url("../i/d.png") -1124px 100%;
+
+@-webkit-keyframes player-down {
+	from { background-position: 0px 0px; }
+	to { background-position: -224px 0px; }
+}
+
+@-moz-keyframes player-up {
+	from { background-position: 0px -64px; }
+	to { background-position: -224px -64px; }
+}
+
+@-webkit-keyframes player-up {
+	from { background-position: 0px -64px; }
+	to { background-position: -224px -64px; }
+}
+
+/*.P0.down {
+	background: url("../i/dude2.png") 0px 0px;
+	-webkit-animation: player-down .4s steps(7, end) infinite;
+	-moz-animation: player-down .4s steps(7, end) infinite;
+}*/
+.P0.up {
+	background: url("../i/dude.png") -32px 100%;
+	/*background: url("../i/dude2.png") -32px -64px;
+	-webkit-animation: player-up .4s steps(7, end) 1;
+	-moz-animation: player-up .4s steps(7, end) 1;*/
+}
+.P0.left { 
+	background: url("../i/dude.png") -2px 100%;
+}
+.P0.right {
+	background: url("../i/dude.png") -64px 100%;
 }
 .R0 { /* RADIOACTIVE */
-	background: url("../i/d.png") -1428px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -1428px 100%;
 }
 .S4 { /* SNOW */
-	background: url("../i/d.png") -1460px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -1460px 100%;
 }
-.T3 { /* TELEPORT IN BLOCK */
-	background: url("../i/d.png") -1492px 100%, url("../i/d.png") -900px 100%;
+.T3 { /* TELEPORT IN - BLOCK */
+	background: url("../i/d.png") -1492px 100%;
 }
 .T4 { /* TELEPORT OUT */
-	background: url("../i/d.png") -1524px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -1524px 100%;
 }
 .W0 { /* WALL BLOCK */
 	background: url("../i/d.png") -1556px 100%;
 }
 /* EXTRAS */
 .C0 { /* CLOCK */
-	background: url("../i/d.png") -700px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -700px 100%;
 }
 .H0 { /* HEART */
-	background: url("../i/d.png") -732px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -731px 100%;
 }
 .M0 { /* MAGNETIZER */
-	background: url("../i/d.png") -764px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -764px 100%;
 }
 .P1 { /* PULLER (T) */
-	background: url("../i/d.png") -796px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -796px 100%;
 }
 .P2 { /* PUSHER (P) */
-	background: url("../i/d.png") -828px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -828px 100%;
 }
 .W7 { /* WHEEL */
-	background: url("../i/d.png") -860px 100%, url("../i/d.png") -900px 100%;
+	background: url("../i/d.png") -860px 100%;
 }
 
-.item {
-	-webkit-transition: left .3s, top .3s/*, z-index .5s*/;
-	-moz-transition: left .3s, top .3s/*, z-index .5s*/;
+.item, .player {
+	-webkit-transition: left .4s/* .1s*/, top .4s/* .1s*//*, z-index .5s*/;
+	-moz-transition: left .3s/* .1s*/, top .3s/* .1s*//*, z-index .5s*/;
+	-o-transition: left .3s/* .1s*/, top .3s/* .1s*//*, z-index .5s*/;
 }
 
 #renderBoard {
 	position: absolute;
-	top: 150px;
+	top: 50px;
 	left: 100px;
 	z-index: -100;
 }
@@ -295,16 +365,16 @@ body {
 	left: 710px;
 }
 #stone1 {
-	top: 805px;
-	left: 345px;
+	top: 405px;
+	left: 745px;
 }
 #stone2 {
 	top: 523px;
 	left: 5px;
 }
 #stone3 {
-	top: 561px;
-	left: 871px;
+	top: 61px;
+	left: 1071px;
 }
 #hole1 {
 	top: 123px;
