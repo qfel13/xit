@@ -31,7 +31,7 @@ var xit = (function(document) {
 	 */
 	function init() {
 		initDom();
-		level = localStorage["q13.cLevel"] || 12;
+		level = localStorage["q13.cLevel"] || 1;
 		loadLevel(level);
 		bindKeys();
 	}
@@ -499,11 +499,11 @@ var xit = (function(document) {
 	}
 	
 	function isFloor(v) {
-		return ["E0", "F0", "G0", "I0", "O0", "T0", "T1", "T2", "T5"].indexOf(v) > -1;
+		return ["E0", "E1", "F0", "G0", "I0", "O0", "T0", "T1", "T2", "T5", "W8", "W9"].indexOf(v) > -1;
 	}
 	
 	function isItem(v) {
-		return isBlock(v) || isExtra(v) || isSlider(v) || isBomb(v) || isBlowable(v) || isTeleportIn(v) || isTeleportOut(v);
+		return isBlock(v) || isWheelBlock(v) || isExtra(v) || isSlider(v) || isBomb(v) || isBlowable(v) || isTeleportIn(v) || isTeleportOut(v);
 	}
 	
 	function isPlayer(v) {
@@ -511,7 +511,11 @@ var xit = (function(document) {
 	}
 	
 	function isBlock(v) {
-		return ["B1", "B2", "B3", "M1", "M2", "M3", "M4", "M5", "M6", "M7", "M8", "M9"].indexOf(v) > -1;
+		return ["B1", "B2", "B3", "M1", "M2", "M3", "S4"].indexOf(v) > -1;
+	}
+	
+	function isWheelBlock(v) {
+		return ["M4", "M5", "M6", "M7", "M8", "M9", "W1", "W2", "W3", "W4", "W5", "W6"].indexOf(v) > -1;
 	}
 	
 	function isBomb(v) {
@@ -542,6 +546,13 @@ var xit = (function(document) {
 		var v = val.v;
 		if (isBlock(v)) {
 			val.block = true;
+		} else if (isWheelBlock(v)) {
+			val.block = true;
+			if (["M4", "M5", "M6", "W1", "W2", "W3"].indexOf(v) > -1) {
+				val.dir = [LEFT, RIGHT];
+			} else {
+				val.dir = [UP, DOWN];
+			}
 		} else if (isSlider(v)) {
 			val.slider = true;
 		} else if (isExtra(v)) {
@@ -555,6 +566,9 @@ var xit = (function(document) {
 			val.w = MAX_W + 1;
 		} else if (isTeleportOut(v)) {
 			val.teleportOut = true;
+			val.w = 1;
+		} else if (isTeleportIn(v)) {
+			val.teleportIn = true;
 			val.w = 1;
 		}
 		
@@ -582,6 +596,12 @@ var xit = (function(document) {
 			val.twister = true;
 		} else if(val.v === "E0") {
 			val.exit = true;
+		} else if(val.v === "E1") {
+			val.electricity = true;
+		} else if(val.v === "W8") {
+			val.water = true;
+		} else if(val.v === "W9") {
+			val.deepWater = true;
 		}
 		
 		map[index] = val;
@@ -617,7 +637,7 @@ var xit = (function(document) {
 					if (it) { // FIXME:
 						w += it.w;
 						if (w < MAX_W) {
-							if ((it.block && moveBlock(n, a, it, w)) || (it.slider && moveSlider(n, a, it, w))) {
+							if (((it.block || it.teleportIn || it.teleportOut) && moveBlock(n, a, it, w)) || (it.slider && moveSlider(n, a, it, w))) {
 								moveItem(item, n, a);
 								return true;
 							}
@@ -830,7 +850,7 @@ var xit = (function(document) {
 			var it = getItem(n);
 			if (it) {
 				if (debug["movePlayer"]) { console.log("it", it); }
-				if (it.block || it.teleportOut) {
+				if (it.block || it.teleportOut || it.teleportIn) {
 					if (debug["movePlayer"]) { console.log("move block"); }
 					if (moveBlock(n, a, it)) {
 						playerMove = true;
@@ -845,9 +865,9 @@ var xit = (function(document) {
 					if (pickExtra(it)) {
 						playerMove = true;
 					}
-				// } else if (it.teleportOut) {
 				}
-			} else {
+			}
+			if ((it && playerMove) || !it) {
 				if (f.exit) {
 					playerMove = true;
 					info("Level " + cLevel + " completed!");
@@ -860,7 +880,7 @@ var xit = (function(document) {
 					playerMove = true;
 					teleportOut = items[0];//findTeleportOut();
 					n = teleportOut.index + player.dir;
-				} else if (f.trap) {
+				} else if (f.trap || f.electricity || f.water || f.deepWater) {
 					playerMove = true;
 					info("Try one more time", true);
 					reloadLevel();
