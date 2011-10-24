@@ -4,7 +4,7 @@ var xit = (function(document) {
 		cExtra = 0,
 		cLevel,
 		chooseExtraMode = false,
-		debug = {initDom: true, useExtra: true},
+		debug = {initDom: false},
 		energyDiv,
 		extras = [],
 		infoDiv,
@@ -1275,16 +1275,6 @@ var xit = (function(document) {
 		document.addEventListener("keydown", keydownHandler, false);
 	}
 		
-	/**
-	 * Module initialization.
-	 * @public
-	 */
-	function init() {
-		initDom();
-		loadLevel(localStorage["q13.cLevel"] || 1);
-		bindKeys();
-	}
-	
 	function triggerBombForPlayer(player) {
 		var n, item, start, now, diff, itIndex;
 		n = player.index + player.dir;
@@ -1433,6 +1423,16 @@ var xit = (function(document) {
 			selectExtra(cExtra);
 		}
 		chooseExtraMode = !chooseExtraMode;
+	}
+	
+	/**
+	 * Module initialization.
+	 * @public
+	 */
+	function init() {
+		initDom();
+		loadLevel(+localStorage["q13.cLevel"] || 1);
+		bindKeys();
 	}
 	
 	return {

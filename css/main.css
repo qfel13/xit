@@ -19,6 +19,11 @@ body {
 	color: white;
 	padding: 5px;
 }
+#help > a {
+	color: #400000;
+	font-weight: bold;
+	font-size: 130%;
+}
 #help > .title {
 	background: #400000;
 	color: white;
