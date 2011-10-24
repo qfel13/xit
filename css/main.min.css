@@ -1,0 +1,150 @@
+body{font-family:"Verdana", "Arial";background-color:#400000;color:#FFF;margin:0;height:100%;}
+#help{position:absolute;top:10px;right:10px;width:200px;background-color:#7F2100;background-color:rgba(255, 255, 255, 0.5);font-family:"Courier";font-size:12px;color:white;padding:5px;}
+#help > .title{background:#400000;color:white;font-weight:bold;text-align:center;}
+#info.error{background:red;}
+#info{position:absolute;top:0px;left:0px;min-width:100px;background:green;color:#FFF;font-family:"Courier";display:none;}
+#hud{background-color:#000;background:url("../i/hud_bot.png") no-repeat left, url("../i/hud_bg2.png") repeat left;bottom:0;display:block;left:0;position:fixed;width:100%;height:47px;z-index:10000;}
+#extra0, #extra1, #extra2, #extra3{position:absolute;width:32px;height:30px;bottom:6px;border:2px transparent solid;}
+#energy{bottom:23px;left:500px;background:black;border:orange;width:100px;height:10px;position:absolute;}
+#time{bottom:8px;left:599px;background:black;border:orange;width:1px;height:10px;position:absolute;}
+#extra0.active , #extra1.active , #extra2.active , #extra3.active{-webkit-animation:extra-active .4s steps(2, end) infinite;-moz-animation:extra-active .4s steps(2, end) infinite;}
+#extra3{left:156px;}
+#extra2{left:108px;}
+#extra1{left:60px;}
+#extra0{left:12px;}
+@-moz-keyframes extra-active{from{border-color:orange;}
+to{border-color:transparent;}
+}
+@-webkit-keyframes extra-active{from{border-color:orange;}
+to{border-color:transparent;}
+}
+.D0{background:url("../i/d.png") -1252px 120%, url("../i/d.png") -900px 100%;}
+@-moz-keyframes exit{from{background-position:0px 100%;}
+to{background-position:-256px 100%;}
+}
+@-webkit-keyframes exit{from{background-position:0px 100%;}
+to{background-position:-256px 100%;}
+}
+.E0{background:url("../i/exit2.png") 0px 100%;-webkit-animation:exit 1.3s steps(8, end) infinite;-moz-animation:exit 1.3s steps(8, end) infinite;}
+.E1{background:url("../i/d.png") -932px 100%;}
+.F0{background:url("../i/d.png") -900px 100%;}
+.F1{background:url("../i/afterbomb.png") 0px 100%;}
+.G0{background:url("../i/d.png") -996px 100%;}
+.I0{background:url("../i/d.png") -1028px 100%;}
+.O0{background:url("../i/d.png") -1060px 100%;}
+.T0{background:url("../i/d.png") -1092px 100%;}
+.T1{background:url("../i/d.png") -1124px 100%;}
+@-moz-keyframes trapclose{from{background-position:0px 100%;}
+to{background-position:-192px 100%;}
+}
+@-webkit-keyframes trapclose{from{background-position:0px 100%;}
+to{background-position:-192px 100%;}
+}
+.T5{background:url("../i/trap1.png") -192px 100%;-webkit-animation:trapclose 0.3s steps(6, end) 1;-moz-animation:trapclose 0.3s steps(6, end) 1;}
+.T2{background:url("../i/d.png") -1156px 100%;}
+.W8{background:url("../i/d.png") -1220px 100%;}
+.W9{background:url("../i/d.png") -1188px 100%;}
+.B1{background:url("../i/d.png") 0 100%;}
+.B2{background:url("../i/d.png") -32px 100%;}
+.B3{background:url("../i/d.png") -64px 100%;}
+.M1{background:url("../i/d.png") -96px 100%;}
+.M2{background:url("../i/d.png") -128px 100%;}
+.M3{background:url("../i/d.png") -160px 100%;}
+.M4{background:url("../i/d.png") -192px 100%;}
+.M5{background:url("../i/d.png") -224px 100%;}
+.M6{background:url("../i/d.png") -256px 100%;}
+.M7{background:url("../i/d.png") -288px 100%;}
+.M8{background:url("../i/d.png") -320px 100%;}
+.M9{background:url("../i/d.png") -352px 100%;}
+.S1{background:url("../i/d.png") -384px 100%;}
+.W1{background:url("../i/d.png") -416px 100%;}
+.W2{background:url("../i/d.png") -448px 100%;}
+.W3{background:url("../i/d.png") -480px 100%;}
+.W4{background:url("../i/d.png") -512px 100%;}
+.W5{background:url("../i/d.png") -544px 100%;}
+.W6{background:url("../i/d.png") -576px 100%;}
+.B9{background:url("../i/d.png") -608px 100%;}
+.B0{background:url("../i/d.png") -1300px 100%;}
+.E2{background:url("../i/d.png") -1332px 100%;}
+.E3{background:url("../i/d.png") -1364px 100%;}
+.P0{background:url("../i/d.png") -1396px 100%;}
+@-moz-keyframes player-down{from{background-position:0px 0px;}
+to{background-position:-224px 0px;}
+}
+@-webkit-keyframes player-down{from{background-position:0px 0px;}
+to{background-position:-224px 0px;}
+}
+@-moz-keyframes player-up{from{background-position:0px -64px;}
+to{background-position:-224px -64px;}
+}
+@-webkit-keyframes player-up{from{background-position:0px -64px;}
+to{background-position:-224px -64px;}
+}
+.P0.up{background:url("../i/dude.png") -32px 100%;}
+.P0.left{background:url("../i/dude.png") -2px 100%;}
+.P0.right{background:url("../i/dude.png") -64px 100%;}
+.R0{background:url("../i/d.png") -1428px 100%;}
+.S4{background:url("../i/d.png") -1460px 100%;}
+.T3{background:url("../i/d.png") -1492px 100%;}
+.T4{background:url("../i/d.png") -1524px 100%;}
+.W0{background:url("../i/d.png") -1556px 100%;}
+.C0{background:url("../i/d.png") -700px 100%;}
+.H0{background:url("../i/d.png") -731px 100%;}
+.M0{background:url("../i/d.png") -764px 100%;}
+.P1{background:url("../i/d.png") -796px 100%;}
+.P2{background:url("../i/d.png") -828px 100%;}
+.W7{background:url("../i/d.png") -860px 100%;}
+.item, .player{-webkit-transition:left .4s , top .4s;-moz-transition:left .3s , top .3s;-o-transition:left .3s , top .3s;}
+#renderBoard{position:absolute;top:50px;left:100px;z-index:-100;}
+#renderBoard div{position:absolute;width:30px;height:57px;background-repeat:no-repeat;}
+.dots{position:absolute;width:65px;height:58px;background:url("../i/d.png") no-repeat -2400px 100%;z-index:100;}
+.stone{position:absolute;width:70px;height:65px;background:url("../i/d.png") no-repeat -2570px 100%;}
+.hole{position:absolute;width:95px;height:96px;background:url("../i/d.png") no-repeat -2470px 100%;}
+#dots1{top:130px;left:10px;}
+#dots2{top:300px;left:710px;}
+#stone1{top:405px;left:745px;}
+#stone2{top:523px;left:5px;}
+#stone3{top:61px;left:1071px;}
+#hole1{top:123px;left:789px;}
+#hole2{top:220px;left:-50px;}
+.bottomLeftCorner{background:url("../i/d.png") -1600px 100%;}
+.bottomLeftRightCorner{background:url("../i/d.png") -1600px 100% , url("../i/d.png") -1632px 100%;}
+.topRightCornerBottomLeftCorner{background:url("../i/d.png") -1600px 100% , url("../i/d.png") -1696px 100%;}
+.bottomLeftCornerWallRight{background:url("../i/d.png") -1600px 100% , url("../i/d.png") -2144px 100%;}
+.bottomRightCorner{background:url("../i/d.png") -1632px 100%;}
+.topLeftCornerBottomRightCorner{background:url("../i/d.png") -1632px 100%, url("../i/d.png") -1664px 100%;}
+.bottomRightCornerWallLeft{background:url("../i/d.png") -1632px 100%, url("../i/d.png") -2016px 100%;}
+.topLeftCorner{background:url("../i/d.png") -1664px 100%;}
+.topLeftRightCorner{background:url("../i/d.png") -1664px 100%, url("../i/d.png") -1696px 100%;}
+.topLeftRightCornerWallBottom{background:url("../i/d.png") -1664px 100%, url("../i/d.png") -1696px 100%, url("../i/d.png") -1728px 100%;}
+.topLeftCornerWallBottom{background:url("../i/d.png") -1664px 100%, url("../i/d.png") -1728px 100%;}
+.topLeftCornerWallBottomRight{background:url("../i/d.png") -1664px 100%, url("../i/d.png") -1952px 100%;}
+.topLeftCornerWallRight{background:url("../i/d.png") -1664px 100%, url("../i/d.png") -2144px 100%;}
+.topRightCorner{background:url("../i/d.png") -1696px 100%;}
+.topRightCornerWallBottom{background:url("../i/d.png") -1696px 100%, url("../i/d.png") -1728px 100%;}
+.topRightCornerWallBottomLeft{background:url("../i/d.png") -1696px 100%, url("../i/d.png") -1760px 100%;}
+.topRightCornerWallLeft{background:url("../i/d.png") -1696px 100%, url("../i/d.png") -2016px 100%;}
+.wallBottom{background:url("../i/d.png") -1728px 100%;}
+.wallBottomLeft{background:url("../i/d.png") -1760px 100%;}
+.wallBottomLeftCornerWallRight{background:url("../i/d.png") -1792px 100%;}
+.wallBottomWallLeftRightCorner{background:url("../i/d.png") -1824px 100%;}
+.wallBottomWallLeftWallRight{background:url("../i/d.png") -1856px 100%;}
+.wallBottomLeftCornerRightCorner{background:url("../i/d.png") -1888px 100%;}
+.wallBottomLeftWallLeft{background:url("../i/d.png") -1920px 100%;}
+.wallBottomRight{background:url("../i/d.png") -1952px 100%;}
+.wallBottomRightWallRight{background:url("../i/d.png") -1984px 100%;}
+.wallLeft{background:url("../i/d.png") -2016px 100%;}
+.wallLeftRight{background:url("../i/d.png") -2016px 100%, url("../i/d.png") -2144px 100%;}
+.wallLeftBottom{background:url("../i/d.png") -2048px 100%;}
+.wallLeftTop{background:url("../i/d.png") -2080px 100%;}
+.wallLeftTopBottom{background:url("../i/d.png") -2112px 100%;}
+.wallRight{background:url("../i/d.png") -2144px 100%;}
+.wallRightBottom{background:url("../i/d.png") -2176px 100%;}
+.wallRightTop{background:url("../i/d.png") -2208px 100%;}
+.wallRightTopBottom{background:url("../i/d.png") -2240px 100%;}
+.wallTop{background:url("../i/d.png") -2272px 100%;}
+.wallTopBottom{background:url("../i/d.png") -2272px 100%, url("../i/d.png") -1728px 100%;}
+.wallTopLeft{background:url("../i/d.png") -2304px 100%, url("../i/d.png") -900px 100%;}
+.wallTopLeftRight{background:url("../i/d.png") -2336px 100%;}
+.wallTopRight{background:url("../i/d.png") -2368px 100%, url("../i/d.png") -900px 100%;}
+.wallBlock{background:url("../i/d.png") -1556px 100%;}
