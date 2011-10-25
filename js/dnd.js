@@ -258,7 +258,7 @@ var xit = (function(document) {
 	 * @dependencies none
 	 */
 	function isBlock(v) {
-		return ["B1", "B2", "B3", "M1", "M2", "M3", "S4"].indexOf(v) > -1;
+		return ["B1", "B2", "B3", "M1", "M2", "M3"].indexOf(v) > -1;
 	}
 	
 	/**
@@ -319,10 +319,18 @@ var xit = (function(document) {
 	
 	/**
 	 * @private
-	 * @dependencies isBlock(), isWheelBlock(), isExtra(), isSlider(), isBomb(), isBlowable(), isTeleportIn(), isTeleportOut()
+	 * @dependencies none
+	 */
+	function isSnow(v) {
+		return v === "S4";
+	}
+	
+	/**
+	 * @private
+	 * @dependencies isBlock(), isWheelBlock(), isExtra(), isSlider(), isBomb(), isBlowable(), isTeleportIn(), isTeleportOut(), isSonw()
 	 */
 	function isItem(v) {
-		return isBlock(v) || isWheelBlock(v) || isExtra(v) || isSlider(v) || isBomb(v) || isBlowable(v) || isTeleportIn(v) || isTeleportOut(v);
+		return isBlock(v) || isWheelBlock(v) || isExtra(v) || isSlider(v) || isBomb(v) || isBlowable(v) || isTeleportIn(v) || isTeleportOut(v) || isSnow(v);
 	}
 	
 	/**
@@ -375,6 +383,9 @@ var xit = (function(document) {
 		} else if (isTeleportIn(v)) {
 			val.teleportIn = true;
 			val.w = 1;
+		} else if (isSnow(v)) {
+			val.snow = true;
+			val.block = true;
 		}
 		
 		if (val.block || val.slider) {
@@ -825,7 +836,11 @@ var xit = (function(document) {
 	 */
 	function nextLevel() {
 		stopCountdown();
-		loadLevel(cLevel + 1);
+		if (cLevel === 14) {
+			alert("you finished all prepared levels");
+		} else {
+			loadLevel(cLevel + 1);
+		}
 	}
 	
 	/**
@@ -938,12 +953,41 @@ var xit = (function(document) {
 		}
 	}
 	
+	function findTeleportOut(v) {
+		var i, l, item, tv;
+		if(v === "T0") {
+			tv = "T4";
+		} else if(v === "T5") {
+			tv = "T6";
+		}
+		for (i = 0, l = items.length; i < l; i += 1) {
+			item = items[i];
+			if (item && item.v === tv) {
+				return item;
+			}
+		}
+		return undefined;
+	}
+	
+	function findWaterAround(n) {
+		var f, i, l, index, r = [], 
+			a = [UP, DOWN, LEFT, RIGHT, 2*UP, 2*DOWN, 2*LEFT, 2*RIGHT, UP + RIGHT, UP + LEFT, DOWN + RIGHT, DOWN + LEFT];
+		for (i = 0, l = a.length; i < l; i += 1) {
+			index = n + a[i];
+			f = map[index];
+			if (f && (f.water || f.deepWater)) {
+				r.push(index);
+			}
+		}
+		return r;
+	}
+	
 	moveBlock = function moveBlock(p, a, item, w) {
 		if (debug.moveBlock) { console.log("moveBlock", p, a, item, w); }
 		var n = p + a,
 		f = map[n],
 		teleportOut,
-		cl, i, trap, afterIce, afterIceIt, it;
+		cl, i, j, l, trap, afterIce, afterIceIt, it, waterIndexes, tf;
 		
 		if (f) {
 			if (!w) {
@@ -972,10 +1016,24 @@ var xit = (function(document) {
 						return true;
 					} else if (f.teleport) {
 						if (debug.moveBlock) { console.log("teleport", f, "a", a); }
-						teleportOut = items[0];//findTeleportOut();
-						n = teleportOut.index + a;
-						moveItem(item, n, a);
-						return true;
+						teleportOut = findTeleportOut(f.v);
+						if (teleportOut) {
+							n = teleportOut.index + a;
+							tf = map[n];
+							if (!tf) {
+								removeFrom(items, item);
+							} else if (tf.trap) {
+								addToMap(n, {v: "T5"});
+								setClassName2(n, "T5");
+								removeFrom(items, item);
+							} else {
+								moveItem(item, n, a);
+							}
+							return true;
+						} else {
+							moveItem(item, n, a);
+							return true;
+						}
 					} else if (f.ice) {
 						i = n;
 						trap = false;
@@ -1012,6 +1070,8 @@ var xit = (function(document) {
 										cl.add("W3");
 									}
 								}
+							} else if (afterIce.water && !afterIceIt) {
+							} else if (afterIce.deepWater && !afterIceIt) {
 							} else if (afterIce.floor && !afterIceIt) {
 								i += a;
 								if (afterIce.glue) {
@@ -1037,6 +1097,35 @@ var xit = (function(document) {
 							}
 						}
 						return true;
+					} else if (f.deepWater) {
+						removeFrom(items, item);
+						return true;
+					} else if (f.water) {
+						// console.log("water");
+						f.water = false;
+						// moveItem(item, n, a);
+						addToMap(n, {v: "WB"});// FIXME
+						setClassName2(n, "WB");// FIXME
+						removeFrom(items, item);
+						return true;
+					} else if (f.electricity) {
+						console.log("electricity", f, item);
+						if (item.snow) {
+							console.log("item.snow");
+							var waterIndexes = findWaterAround(n);
+							for (var j = 0, l = waterIndexes.length; j < l; j += 1) {
+								addToMap(waterIndexes[j], {v: "I0"});// FIXME
+								setClassName2(waterIndexes[j], "I0");// FIXME
+							}
+						} else if (item.teleportIn) {
+							console.log("item.teleportIn");
+							addToMap(n, {v: "T0"});// FIXME
+							setClassName2(n, "T0");// FIXME
+							removeFrom(items, item);
+							return true;
+						}
+						moveItem(item, n, a);
+						return true;
 					} else if (f.floor) {
 						moveItem(item, n, a);
 						if (f.glue) {
@@ -1055,6 +1144,7 @@ var xit = (function(document) {
 		var n = p + a,
 			moved = false,
 			trap = false,
+			water = false,
 			i = p,
 			next = map[n],
 			nextIt = getItem(n),
@@ -1081,6 +1171,9 @@ var xit = (function(document) {
 						if (next.trap) {
 							trap = true;
 							break;
+						} else if (next.water) {
+							water = true;
+							break;
 						}
 						next = map[i+a];
 						nextIt = getItem(i+a);
@@ -1088,9 +1181,14 @@ var xit = (function(document) {
 					}
 					
 					moveItem(slider, i, a);
-					if (trap) { 
+					if (trap) {
 						addToMap(i, {v: "T5"});
 						setClassName2(i, "T5");
+						removeFrom(items, slider);
+					}
+					if (water) {
+						addToMap(i, {v: "WB"});
+						setClassName2(i, "WB");
 						removeFrom(items, slider);
 					}
 					if (map[i].glue) {
@@ -1106,7 +1204,7 @@ var xit = (function(document) {
 		var n = player.index + a,
 			playerMove = false,
 			f = map[n], // floor object
-			it, tn, teleportOut;
+			it, tn, tf, teleportOut;
 		
 		player.dir = a;
 		if (a === LEFT) {
@@ -1151,23 +1249,33 @@ var xit = (function(document) {
 				} else if (f.teleport) {
 					if (debug.movePlayer) { console.log("teleport", f, "player.dir", player.dir); }
 					
-					teleportOut = items[0];//findTeleportOut(); // FIXME
-					tn = teleportOut.index + player.dir;
-					if (!map[tn]) {
-						blow(n);
-						playerMove = false;
-						removeFrom(players, player);
-						info("Try one more time", true);
-						setTimeout(reloadLevel, 500);
-					} else if (getItem(tn)) {
-						blow(tn);
-						playerMove = false;
-						removeFrom(players, player);
-						info("Try one more time", true);
-						setTimeout(reloadLevel, 500);
+					teleportOut = findTeleportOut(f.v);
+					if (teleportOut) {
+						tn = teleportOut.index + player.dir;
+						tf = map[tn]
+						if (!tf) {
+							blow(n);
+							playerMove = false;
+							removeFrom(players, player);
+							info("Try one more time", true);
+							setTimeout(reloadLevel, 500);
+						} else if (getItem(tn)) {
+							blow(tn);
+							playerMove = false;
+							removeFrom(players, player);
+							info("Try one more time", true);
+							setTimeout(reloadLevel, 500);
+						} else if (tf.trap) {
+							playerMove = false;
+							removeFrom(players, player);
+							info("Try one more time", true);
+							setTimeout(reloadLevel, 500);
+						} else {
+							playerMove = true;
+							n = tn;
+						}
 					} else {
 						playerMove = true;
-						n = tn;
 					}
 				} else if (f.trap || f.electricity || f.water || f.deepWater) {
 					playerMove = true;

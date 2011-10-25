@@ -175,6 +175,21 @@ body {
 .W9 { /* DEEP WATER */
 	background: url("../i/d.png") -1188px 100%;
 }
+.water {
+	background-color: rgba(0, 168, 168, 1);
+	background-position-y: -25px;
+}
+.WB {
+	background: url("../i/d.png") 0 -25px, url("../i/d.png") -1220px 100%;
+}
+.WB::before {
+	position: absolute;
+	content: "";
+	background: rgba(0,168,168, 0.5);
+	width: 30px;
+	height: 32px;
+	top: 25px;
+}
 /* BLOCKS */
 .B1 { /* BLOCK WEIGHT 1 */
 	background: url("../i/d.png") 0 100%;
