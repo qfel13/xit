@@ -975,8 +975,12 @@ var xit = (function(document) {
 		for (i = 0, l = a.length; i < l; i += 1) {
 			index = n + a[i];
 			f = map[index];
-			if (f && (f.water || f.deepWater)) {
-				r.push(index);
+			if (f) {
+				if (f.water) {
+					r.push({v: "W8", index: index});
+				} else if (f.deepWater) {
+					r.push({v: "W9", index: index});
+				}
 			}
 		}
 		return r;
@@ -987,7 +991,7 @@ var xit = (function(document) {
 		var n = p + a,
 		f = map[n],
 		teleportOut,
-		cl, i, j, l, trap, afterIce, afterIceIt, it, waterIndexes, tf;
+		cl, i, j, l, trap, afterIce, afterIceIt, it, waterIndex, waterIndexes, tf, v;
 		
 		if (f) {
 			if (!w) {
@@ -1002,7 +1006,17 @@ var xit = (function(document) {
 					if (it) { // FIXME:
 						w += it.w;
 						if (w < MAX_W) {
-							if (((it.block || it.teleportIn || it.teleportOut) && moveBlock(n, a, it, w)) || (it.slider && moveSlider(n, a, it, w))) {
+							if (it.snow && f.electricity) {
+								console.log("waterIndexes", it.waterIndexes);
+								for(i = 0, l = it.waterIndexes.length; i < l; i += 1) {
+									v = it.waterIndexes[i].v;
+									j = it.waterIndexes[i].index;
+									addToMap(j, {v: v});// FIXME
+									setClassName2(j, v);// FIXME
+								}
+							}
+							if (((it.block || it.teleportIn || it.teleportOut) && moveBlock(n, a, it, w))
+									|| (it.slider && moveSlider(n, a, it, w))) {
 								moveItem(item, n, a);
 								return true;
 							}
@@ -1071,7 +1085,9 @@ var xit = (function(document) {
 									}
 								}
 							} else if (afterIce.water && !afterIceIt) {
+								console.log("water");
 							} else if (afterIce.deepWater && !afterIceIt) {
+								console.log("deepWater");
 							} else if (afterIce.floor && !afterIceIt) {
 								i += a;
 								if (afterIce.glue) {
@@ -1112,11 +1128,13 @@ var xit = (function(document) {
 						console.log("electricity", f, item);
 						if (item.snow) {
 							console.log("item.snow");
-							var waterIndexes = findWaterAround(n);
-							for (var j = 0, l = waterIndexes.length; j < l; j += 1) {
-								addToMap(waterIndexes[j], {v: "I0"});// FIXME
-								setClassName2(waterIndexes[j], "I0");// FIXME
+							waterIndexes = findWaterAround(n);
+							for (j = 0, l = waterIndexes.length; j < l; j += 1) {
+								waterIndex = waterIndexes[j].index;
+								addToMap(waterIndex, {v: "I0"});
+								setClassName2(waterIndex, "I0");
 							}
+							item.waterIndexes = waterIndexes;
 						} else if (item.teleportIn) {
 							console.log("item.teleportIn");
 							addToMap(n, {v: "T0"});// FIXME
@@ -1252,7 +1270,7 @@ var xit = (function(document) {
 					teleportOut = findTeleportOut(f.v);
 					if (teleportOut) {
 						tn = teleportOut.index + player.dir;
-						tf = map[tn]
+						tf = map[tn];
 						if (!tf) {
 							blow(n);
 							playerMove = false;
