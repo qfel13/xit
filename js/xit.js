@@ -1400,11 +1400,11 @@ var xit = (function(document) {
 			xit.extra();
 			p = true;
 		} else if (k === 67 && !ctrl && !shift) { // c
-			localStorage["level"] = levelCache[cLevel];
-			document.location.href = "editor/#load";
+			document.location.href = "editor/";
 			p = true;
 		} else if (k === 69 && !ctrl && !shift) { // e
-			document.location.href = "editor/";
+			localStorage["level"] = levelCache[cLevel];
+			document.location.href = "editor/#load";
 			p = true;
 		} else if (k === 82 && !ctrl && !shift) { // r
 			xit.reloadLevel();
