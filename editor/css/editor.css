@@ -222,7 +222,7 @@ body {
 /* DROPS */
 #dropBoard {
 	position: absolute;
-	top: 150px;
+	top: 200px;
 	left: 100px;
 	z-index: 99;
 }
@@ -248,7 +248,7 @@ body {
 }
 #renderBoard {
 	position: absolute;
-	top: 150px;
+	top: 200px;
 	left: 100px;
 	z-index: -100;
 }
