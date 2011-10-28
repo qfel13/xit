@@ -5,6 +5,7 @@ var xit = (function(document) {
 		cLevel,
 		chooseExtraMode = false,
 		debug = {initDom: false},
+		defaultLevelName = "level",
 		energyDiv,
 		extras = [],
 		infoDiv,
@@ -1403,7 +1404,7 @@ var xit = (function(document) {
 			document.location.href = "editor/";
 			p = true;
 		} else if (k === 69 && !ctrl && !shift) { // e
-			localStorage["level"] = levelCache[cLevel];
+			localStorage[defaultLevelName] = levelCache[cLevel];
 			document.location.href = "editor/#load";
 			p = true;
 		} else if (k === 82 && !ctrl && !shift) { // r
@@ -1589,13 +1590,12 @@ var xit = (function(document) {
 			h = l.hash,
 			hMatch = h.match(loadRegex),
 			s = l.search,
-			sMatch = s.match(loadRegex),
-			name = "level";
+			sMatch = s.match(loadRegex);
 			
 		if (hMatch) {
-			return (hMatch[1] || name);
+			return (hMatch[1] || defaultLevelName);
 		} else if (sMatch) {
-			return (sMatch[1] || name);
+			return (sMatch[1] || defaultLevelName);
 		}
 	}
 	
