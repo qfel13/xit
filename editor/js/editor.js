@@ -573,8 +573,9 @@ $(function () {
 		return false;
 	}
 	
-	var lName = getLevelName(),
-		loaded = false;
-	
-	loadLevelFromStorage("level");
+	var lName = getLevelName();
+		
+	if (lName) {
+		loadLevelFromStorage("level");
+	}
 });
