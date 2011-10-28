@@ -327,10 +327,18 @@ var xit = (function(document) {
 	
 	/**
 	 * @private
-	 * @dependencies isBlock(), isWheelBlock(), isExtra(), isSlider(), isBomb(), isBlowable(), isTeleportIn(), isTeleportOut(), isSonw()
+	 * @dependencies none
+	 */
+	function isRadioactive(v) {
+		return v === "R0";
+	}
+	
+	/**
+	 * @private
+	 * @dependencies isBlock(), isWheelBlock(), isExtra(), isSlider(), isBomb(), isBlowable(), isTeleportIn(), isTeleportOut(), isSonw(), isRadioactive()
 	 */
 	function isItem(v) {
-		return isBlock(v) || isWheelBlock(v) || isExtra(v) || isSlider(v) || isBomb(v) || isBlowable(v) || isTeleportIn(v) || isTeleportOut(v) || isSnow(v);
+		return isBlock(v) || isWheelBlock(v) || isExtra(v) || isSlider(v) || isBomb(v) || isBlowable(v) || isTeleportIn(v) || isTeleportOut(v) || isSnow(v) || isRadioactive(v);
 	}
 	
 	/**
@@ -414,6 +422,7 @@ var xit = (function(document) {
 		} else if(val.v === "T2") {
 			val.twister = true;
 		} else if(val.v === "E0") {
+			console.log("E0");
 			val.exit = true;
 		} else if(val.v === "E1") {
 			val.electricity = true;
@@ -759,6 +768,22 @@ var xit = (function(document) {
 			parseLevel(levelStr);
 			cLevel = n;
 		}
+	}
+	
+	/**
+	 * @public
+	 * @param {string} name localStorage key
+	 * @dependencies parseLevel [console]
+	 */
+	function loadLevelFromStorage (name) {
+		var levelStr = localStorage[name];
+		if (levelStr) {
+			levelCache[0] = levelStr;
+			parseLevel(levelStr);
+			cLevel = 0;
+			return true;
+		}
+		return false;
 	}
 	
 	/**
@@ -1374,6 +1399,13 @@ var xit = (function(document) {
 		} else if (k === 13) { //enter
 			xit.extra();
 			p = true;
+		} else if (k === 67 && !ctrl && !shift) { // c
+			localStorage["level"] = levelCache[cLevel];
+			document.location.href = "editor/#load";
+			p = true;
+		} else if (k === 69 && !ctrl && !shift) { // e
+			document.location.href = "editor/";
+			p = true;
 		} else if (k === 82 && !ctrl && !shift) { // r
 			xit.reloadLevel();
 			p = true;
@@ -1551,13 +1583,41 @@ var xit = (function(document) {
 		chooseExtraMode = !chooseExtraMode;
 	}
 	
+	function getLevelName() {
+		var loadRegex = /load=?(\w+)?/i,
+			l = document.location,
+			h = l.hash,
+			hMatch = h.match(loadRegex),
+			s = l.search,
+			sMatch = s.match(loadRegex),
+			name = "level";
+			
+		if (hMatch) {
+			return (hMatch[1] || name);
+		} else if (sMatch) {
+			return (sMatch[1] || name);
+		}
+	}
+	
 	/**
 	 * Module initialization.
 	 * @public
 	 */
 	function init() {
+		var lName = getLevelName(),
+			loaded = false;
+		
 		initDom();
-		loadLevel(+localStorage["q13.cLevel"] || 1);
+		
+		if (lName) {
+			loaded = loadLevelFromStorage(lName);
+			if (!loaded) {
+				info("Loading from localStorage level with name '" + lName + "' failed", true);
+			}
+		}
+		if (!loaded) {
+			loadLevel(+localStorage["q13.cLevel"] || 1);
+		}
 		bindKeys();
 	}
 	
