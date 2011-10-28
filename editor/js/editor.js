@@ -377,9 +377,9 @@ $(function () {
 	
 	function getGeneratedMap () {
 		var count = 0,
-		map = "",
-		debugMap = "",
-		i, l;
+		i, l, version = 1,
+		map = "" + version + "\n",
+		debugMap = "" + version + "\n";
 		
 		for (i = 0, l = levelSize * levelSize; i < l; i += 1) {
 			count += 1;
@@ -493,7 +493,11 @@ $(function () {
 	}
 	
 	function parseLevel(s) {
+		var i,j,l,k,line,lines,className,render, version;
+		
 		lines = s.split("\n");
+		version = lines.shift();
+		console.log("version", version);
 		for (i = 0, k = lines.length; i < k; i += 1) {
 			line = lines[i];
 			for (j = 0, l = line.length/2; j < l; j += 1) {
@@ -514,7 +518,7 @@ $(function () {
 		
 		function handler(theFile) {
 			return function(e) {
-				var i,j,l,k,line,lines,className,render;
+				
 				// clear map
 				m = [];
 				parseLevel(e.target.result);
