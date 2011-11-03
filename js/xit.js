@@ -4,7 +4,7 @@ var xit = (function(document) {
 		cExtra = 0,
 		cLevel,
 		chooseExtraMode = false,
-		debug = {initDom: false},
+		debug = {parseLevel: true},
 		defaultLevelName = "level",
 		energyDiv,
 		extras = [],
@@ -705,19 +705,20 @@ var xit = (function(document) {
 		var i, j, l, ll, k, line, lines, className, version;
 
 			clean();
-			
 			lines = s.split("\n");
+			lines.pop(); // remove last empty entry
 			version = lines.shift();
 			if(debug.parseLevel) { console.log("vesrion", version); }
 			k = lines.length;
+			if(debug.parseLevel) { console.log("levelSize", levelSize, "k", k); }
 			if (k > levelSize) {
-				console.warn("should reinit DOM");
+				console.warn("k should reinit DOM");
 			}
 			for (i = 0; i < k; i += 1) {
 				line = lines[i];
 				ll = line.length;
 				if ((ll / 2) > levelSize) {
-					console.warn("should reinit DOM");
+					console.warn("l should reinit DOM");
 				}
 				for (j = 0, l = ll / 2; j < l; j += 1) {
 					className = line[2 * j] + line[2 * j + 1];

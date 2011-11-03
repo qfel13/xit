@@ -262,8 +262,9 @@ body {
 /* TODO: ADD CLOSE BUTTON */
 #results {
 	position: absolute;
-	top: 30px;
+	top: 430px;
 	right: 10px;
+	z-index: 10000;
 }
 #out {
 	background-color: #FFFFFF;
@@ -304,8 +305,8 @@ body {
 	left: 710px;
 }
 #stone1 {
-	top: 805px;
-	left: 345px;
+	top: 705px;
+	left: 745px;
 }
 #stone2 {
 	top: 523px;

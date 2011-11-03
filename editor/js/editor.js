@@ -1,3 +1,7 @@
+/*jslint white: true, browser: true, devel: true, bitwise: true, indent: 4, maxerr: 50 */
+/*global jQuery */
+(function ($) {
+'use strict';
 $(function () {
 	var levelSize = 20, // TODO: 
 	debug = false, 
@@ -10,7 +14,9 @@ $(function () {
 	drops = $('.drop'),
 	borderShown = false,
 	downloader = $('#downloader'),
-	iframeAdded = false;
+	iframeAdded = false,
+	lName,
+	trimLevel = false;
 	
 	
 	console.log("cLevel", localStorage["q13.cLevel"]);
@@ -30,7 +36,7 @@ $(function () {
 		return m[idObj.y*levelSize+idObj.x];
 	}
 	
-	function fromId(id, move) {
+	function fromId(id) {
 		var ret = {},
 		start = id.indexOf("_"),
 		end = id.indexOf("_", start + 1);
@@ -230,7 +236,7 @@ $(function () {
 		this.setAttribute('draggable', 'true');
 	});
 	
-	drags.bind("click", function(e) {
+	drags.bind("click", function() {
 		var i, l, cl, render, select, idObj;
 		if(s.length > 0) {
 			cl = this.getAttribute('cl');
@@ -303,22 +309,22 @@ $(function () {
 		return false;
 	});
 	
-	drops.bind('dragenter', function(e) {
+	drops.bind('dragenter', function() {
 		this.className = "drop over";
 		return false;
 	});
 	
-	drops.bind('dragleave', function(e) {
+	drops.bind('dragleave', function() {
 		this.className = "drop out";
 	});
 	
-	drops.bind('mouseup', function(e) {
+	drops.bind('mouseup', function() {
 		if (debug) { console.debug("mouseup id = ", this.id); }
 		paint = false;
 		checkAllWalls();
 	});
 	
-	$(document).bind('mouseup', function(e) {
+	$(document).bind('mouseup', function() {
 		if (debug) { console.debug("body mouseup"); }
 		paint = false;
 	});
@@ -375,37 +381,87 @@ $(function () {
 		}
 	});
 	
+	function trimLines(map, first, last, d) {
+		var i, l, line, e, r = "1\n",
+			fStr = "",
+			lines = map.split("\n");
+		
+		lines.shift();
+		lines.pop();
+		for (i = 0, l = first - 1; i < l; i += 1) {
+			fStr += d ? "00 " : "00";
+		}
+		for (i = 0, l = lines.length; i < l; i += 1) {
+			line = lines[i];
+			line = line.replace(fStr, "");
+			e = ((last + 1) - first) * (d ? 3 : 2);
+			line = line.substring(0, e);
+			r += line + "\n";
+		}
+		return r;
+	}
+	
 	function getGeneratedMap () {
 		var count = 0,
 		i, l, version = 1,
-		map = "" + version + "\n",
-		debugMap = "" + version + "\n";
+		line = "", dLine = "", emptyLine,
+		lastInLine = -1,
+		firstInLine = levelSize + 1,
+		map = version + "\n",
+		debugMap = version + "\n";
 		
+		emptyLine = true;
 		for (i = 0, l = levelSize * levelSize; i < l; i += 1) {
 			count += 1;
-			map += (m[i] || "00");
-			debugMap += m[i] ? m[i] + " " : "00 ";
+			
+			if (m[i]) {
+				line += m[i];
+				dLine += m[i] + " ";
+				emptyLine = false;
+				if (count > lastInLine) {
+					lastInLine = count;
+				}
+				if (count < firstInLine) {
+					firstInLine = count;
+				}
+			} else {
+				line += "00";
+				dLine += "00 ";
+			}
 			if (count === levelSize) {
 				count = 0;
-				map += "\n";
-				debugMap += "\n";
+				if (!trimLevel || !emptyLine) {
+					map += line + "\n";
+					debugMap += dLine + "\n";
+				}
+				emptyLine = true;
+				line = "";
+				dLine = "";
 			}
 		}
+		
+		console.log("firstInLine", firstInLine, "lastInLine", lastInLine);
+		
+		if (trimLevel) {
+			map = trimLines(map, firstInLine, lastInLine, false);
+			debugMap = trimLines(debugMap, firstInLine, lastInLine, true);
+		}
+		
 		return {"map": map, "debugMap": debugMap};
 	}
 	// GENERATE
 	$('#generate').bind('click', function() {
 		var out = $('#out'),
 		text = getGeneratedMap(),
-		qr = $('#qr'),
+		// qr = $('#qr'),
 		textUrl;
 		
 		out.html(text.debugMap);
 		textUrl = encodeURI(text.map);
-		if (debug) { console.debug("text = ", text); }
+		// console.debug("text = ", text);
 		
-		qr.html("<img src='https://chart.googleapis.com/chart?chs=500x500&cht=qr&chl="+textUrl+"&chld=L|1&choe=UTF-8' />");
-		qr.show();
+		// qr.html("<img src='https://chart.googleapis.com/chart?chs=500x500&cht=qr&chl="+textUrl+"&chld=L|1&choe=UTF-8' />");
+		// qr.show();
 	});
 	$('#showOut').bind('click', function() {
 		var out = $('#out');
@@ -445,13 +501,13 @@ $(function () {
 			var bb, blob, iframe, url;
 			
 			if (window.BlobBuilder) {
-				bb = new BlobBuilder();
+				bb = new window.BlobBuilder();
 				url = window.URL;
 			} else if (window.WebKitBlobBuilder) {
-				bb = new WebKitBlobBuilder();
+				bb = new window.WebKitBlobBuilder();
 				url = window.webkitURL;
 			} else if (window.MozBlobBuilder) {
-				bb = new MozBlobBuilder();
+				bb = new window.MozBlobBuilder();
 				url = window.URL;
 			}
 			
@@ -477,7 +533,7 @@ $(function () {
 		var map = getGeneratedMap().map;
 		map = minimizeMap(map);
 		console.log("map\n" + map);
-		localStorage["level"] = map;
+		localStorage.level = map;
 		document.location.href = "../#load";
 	});
 	
@@ -514,37 +570,23 @@ $(function () {
 	
 	$('#files').bind('change', function (evt) {
 		var files = evt.target.files, // FileList object
-		i = 0, l, f, reader;
+		i = 0, f, reader;
 		
-		function handler(theFile) {
+		function handler() {
 			return function(e) {
 				
 				// clear map
 				m = [];
 				parseLevel(e.target.result);
-				/*lines = e.target.result.split("\n");
-				for (i = 0, k = lines.length; i < k; i += 1) {
-					line = lines[i];
-					for (j = 0, l = line.length/2; j < l; j += 1) {
-						className = line[2*j] + line[2*j+1];
-						if (className !== "00") {
-							setInM({"x": j, "y": i}, className);
-							render = document.getElementById("render_" + j + "_" + i);
-							render.className = "render " + className;
-						}
-					}
-				}
-				checkAllWalls();
-				*/
 			};
 		}
 		
 		f = files[i];
 		do {
 			if (f.type.match('text.*')) {
-				reader = new FileReader();
+				reader = new window.FileReader();
 				
-				reader.onload = handler(f);
+				reader.onload = handler();
 				reader.readAsText(f);
 			}
 			i += 1;
@@ -577,9 +619,10 @@ $(function () {
 		return false;
 	}
 	
-	var lName = getLevelName();
+	lName = getLevelName();
 		
 	if (lName) {
 		loadLevelFromStorage("level");
 	}
 });
+}(jQuery));
