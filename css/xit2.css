@@ -16,6 +16,10 @@ body.theme4 {
 	background-color: #617141;
 }
 
+img.gh {
+	
+}
+
 #help {
 	position: absolute;
 	top: 10px;
@@ -76,7 +80,7 @@ body.theme4 {
 
 #hud {
 	background-color: #000;
-	background: url("../i/hud_bot.png") no-repeat left, url("../i/hud_bg2.png") repeat left;
+	background: url("../i/hud_bot.png") no-repeat 0 -1px, url("../i/hud_bg2.png") repeat left;
 	bottom: 0;
 	display: block;
 	left: 0;
@@ -86,7 +90,16 @@ body.theme4 {
 	z-index: 10000;
 }
 
-#extra0, #extra1, #extra2, #extra3{
+@-moz-keyframes extra-active {
+	from { border-color: orange; }
+	to { border-color: transparent; }
+}
+@-webkit-keyframes extra-active {
+	from { border-color: orange; }
+	to { border-color: transparent; }
+}
+
+#extra0, #extra1, #extra2, #extra3 {
 	position: absolute;
 	width: 32px;
 	height: 30px;
@@ -129,7 +142,7 @@ body.theme4 {
 	left: 12px;
 }
 
-.D0, .E1 , .F0, .G0, .I0, .O0, .T0, .T1, .T2, .W8, .W9, .WB, .B1, .B2, .B3, 
+.D0, .E0, .E1 , .F0, .F1, .G0, .I0, .O0, .T0, .T1, .T2, .T5, .W8, .W9, .WB, .B1, .B2, .B3, 
 .M1, .M2, .M3, .M4, .M5, .M6, .M7, .M8, .M9, .S1, .W1, .W2, .W3, .W4, .W5, .W6 ,
 .B9 , .B0, .E2, .E3, .P0, .R0, .S4, .T3, .T4, .W0, .C0, .H0, .M0, .P1, .P2, .W7,
 .bottomLeftCorner , .bottomLeftRightCorner , .topRightCornerBottomLeftCorner , .bottomLeftCornerWallRight , 
@@ -140,10 +153,10 @@ body.theme4 {
 .wallBottomLeftCornerRightCorner , .wallBottomLeftWallLeft , .wallBottomRight, .wallBottomRightWallRight , .wallLeft , 
 .wallLeftRight , .wallLeftBottom , .wallLeftTop , .wallLeftTopBottom , .wallRight , .wallRightBottom , .wallRightTop , 
 .wallRightTopBottom , .wallTop , .wallTopBottom , .wallTopLeft , .wallTopLeftRight , .wallTopRight , .wallBlock  {
-	background-image: url("../i/f.png"), url("../i/f.png"), url("../i/f.png");
+	background-image: url("../i/1.png"), url("../i/1.png"), url("../i/1.png");
 }
 
-.theme2 .D0, .theme2 .E1 , .theme2 .F0, .theme2 .G0, .theme2 .I0, .theme2 .O0, .theme2 .T0, .theme2 .T1, .theme2 .T2, .theme2 .W8, .theme2 .W9, .theme2 .WB, .theme2 .B1, .theme2 .B2, .theme2 .B3, 
+.theme2 .D0, .theme2 .E0, .theme2 .E1 , .theme2 .F0, .theme2 .F1, .theme2 .G0, .theme2 .I0, .theme2 .O0, .theme2 .T0, .theme2 .T1, .theme2 .T2, .theme2 .T5, .theme2 .W8, .theme2 .W9, .theme2 .WB, .theme2 .B1, .theme2 .B2, .theme2 .B3, 
 .theme2 .M1, .theme2 .M2, .theme2 .M3, .theme2 .M4, .theme2 .M5, .theme2 .M6, .theme2 .M7, .theme2 .M8, .theme2 .M9, .theme2 .S1, .theme2 .W1, .theme2 .W2, .theme2 .W3, .theme2 .W4, .theme2 .W5, .theme2 .W6 ,
 .theme2 .B9 , .theme2 .B0, .theme2 .E2, .theme2 .E3, .theme2 .P0, .theme2 .R0, .theme2 .S4, .theme2 .T3, .theme2 .T4, .theme2 .W0, .theme2 .C0, .theme2 .H0, .theme2 .M0, .theme2 .P1, .theme2 .P2, .theme2 .W7,
 .theme2 .bottomLeftCorner , .theme2 .bottomLeftRightCorner , .theme2 .topRightCornerBottomLeftCorner , .theme2 .bottomLeftCornerWallRight , 
@@ -154,10 +167,10 @@ body.theme4 {
 .theme2 .wallBottomLeftCornerRightCorner , .theme2 .wallBottomLeftWallLeft , .theme2 .wallBottomRight, .theme2 .wallBottomRightWallRight , .theme2 .wallLeft , 
 .theme2 .wallLeftRight , .theme2 .wallLeftBottom , .theme2 .wallLeftTop , .theme2 .wallLeftTopBottom , .theme2 .wallRight , .theme2 .wallRightBottom , .theme2 .wallRightTop , 
 .theme2 .wallRightTopBottom , .theme2 .wallTop , .theme2 .wallTopBottom , .theme2 .wallTopLeft , .theme2 .wallTopLeftRight , .theme2 .wallTopRight , .theme2 .wallBlock  {
-	background-image: url("../i/e.png"), url("../i/e.png"), url("../i/e.png");
+	background-image: url("../i/2.png"), url("../i/2.png"), url("../i/2.png");
 }
 
-.theme3 .D0, .theme3 .E1 , .theme3 .F0, .theme3 .G0, .theme3 .I0, .theme3 .O0, .theme3 .T0, .theme3 .T1, .theme3 .T2, .theme3 .W8, .theme3 .W9, .theme3 .WB, .theme3 .B1, .theme3 .B2, .theme3 .B3, 
+.theme3 .D0, .theme3 .E0, .theme3 .E1 , .theme3 .F0, .theme3 .F1, .theme3 .G0, .theme3 .I0, .theme3 .O0, .theme3 .T0, .theme3 .T1, .theme3 .T2, .theme3 .T5, .theme3 .W8, .theme3 .W9, .theme3 .WB, .theme3 .B1, .theme3 .B2, .theme3 .B3, 
 .theme3 .M1, .theme3 .M2, .theme3 .M3, .theme3 .M4, .theme3 .M5, .theme3 .M6, .theme3 .M7, .theme3 .M8, .theme3 .M9, .theme3 .S1, .theme3 .W1, .theme3 .W2, .theme3 .W3, .theme3 .W4, .theme3 .W5, .theme3 .W6 ,
 .theme3 .B9 , .theme3 .B0, .theme3 .E2, .theme3 .E3, .theme3 .P0, .theme3 .R0, .theme3 .S4, .theme3 .T3, .theme3 .T4, .theme3 .W0, .theme3 .C0, .theme3 .H0, .theme3 .M0, .theme3 .P1, .theme3 .P2, .theme3 .W7,
 .theme3 .bottomLeftCorner , .theme3 .bottomLeftRightCorner , .theme3 .topRightCornerBottomLeftCorner , .theme3 .bottomLeftCornerWallRight , 
@@ -171,7 +184,7 @@ body.theme4 {
 	background-image: url("../i/3.png"), url("../i/3.png"), url("../i/3.png");
 }
 
-.theme4 .D0, .theme4 .E1 , .theme4 .F0, .theme4 .G0, .theme4 .I0, .theme4 .O0, .theme4 .T0, .theme4 .T1, .theme4 .T2, .theme4 .W8, .theme4 .W9, .theme4 .WB, .theme4 .B1, .theme4 .B2, .theme4 .B3, 
+.theme4 .D0, .theme4 .E0, .theme4 .E1 , .theme4 .F0, .theme4 .F1, .theme4 .G0, .theme4 .I0, .theme4 .O0, .theme4 .T0, .theme4 .T1, .theme4 .T2, .theme4 .T5, .theme4 .W8, .theme4 .W9, .theme4 .WB, .theme4 .B1, .theme4 .B2, .theme4 .B3, 
 .theme4 .M1, .theme4 .M2, .theme4 .M3, .theme4 .M4, .theme4 .M5, .theme4 .M6, .theme4 .M7, .theme4 .M8, .theme4 .M9, .theme4 .S1, .theme4 .W1, .theme4 .W2, .theme4 .W3, .theme4 .W4, .theme4 .W5, .theme4 .W6 ,
 .theme4 .B9 , .theme4 .B0, .theme4 .E2, .theme4 .E3, .theme4 .P0, .theme4 .R0, .theme4 .S4, .theme4 .T3, .theme4 .T4, .theme4 .W0, .theme4 .C0, .theme4 .H0, .theme4 .M0, .theme4 .P1, .theme4 .P2, .theme4 .W7,
 .theme4 .bottomLeftCorner , .theme4 .bottomLeftRightCorner , .theme4 .topRightCornerBottomLeftCorner , .theme4 .bottomLeftCornerWallRight , 
@@ -185,33 +198,21 @@ body.theme4 {
 	background-image: url("../i/4.png"), url("../i/4.png"), url("../i/4.png");
 }
 
-@-moz-keyframes extra-active {
-	from { border-color: orange; }
-	to { border-color: transparent; }
-}
-@-webkit-keyframes extra-active {
-	from { border-color: orange; }
-	to { border-color: transparent; }
-}
-
 .D0 { /* DOOR */
 	background-position: -1252px 120%, -900px 100%;
 }
 
 /* FLOORS */
 @-moz-keyframes exit {
-	from { background-position: 0px 100%; }
-	to { background-position: -256px 100%; }
+	from { background-position: 0px -60px; }
+	to { background-position: -256px -60px; }
 }
 @-webkit-keyframes exit {
-	from { background-position: 0px 100%; }
-	to { background-position: -256px 100%; }
-}
-.theme4 .E0 { 
-	background: url("../i/exit4.png") 0px 100%;
+	from { background-position: 0px -60px; }
+	to { background-position: -256px -60px; }
 }
 .E0 { /* EXIT */
-	background: url("../i/exit2.png") 0px 100%;
+	background-position: 0px -60px;
 	-webkit-animation: exit 1.3s steps(8, end) infinite;
 	-moz-animation: exit 1.3s steps(8, end) infinite;
 }
@@ -222,7 +223,7 @@ body.theme4 {
 	background-position: -900px 0;
 }
 .F1 { /* FLOOR AFTER BOMB */
-	background: url("../i/afterbomb.png") 0px 100%;
+	background-position: -2400px 0;
 }
 .G0 { /* GLUE */
 	background-position: -996px 0;
@@ -240,18 +241,15 @@ body.theme4 {
 	background-position: -1124px 0;
 }
 @-moz-keyframes trapclose {
-	from { background-position: 0 100%; }
-	to { background-position: -192px 100%; }
+	from { background-position: -512px -60px; }
+	to { background-position: -704px -60px; }
 }
 @-webkit-keyframes trapclose {
-	from { background-position: 0 100%; }
-	to { background-position: -192px 100%; }
-}
-.theme4 .T5 {
-	background: url("../i/trap4.png") -192px 100%;
+	from { background-position: -512px -60px; }
+	to { background-position: -704px -60px; }
 }
 .T5 { /* TRAP CLOSED */
-	background: url("../i/trap1.png") -192px 100%;
+	background-position: -704px -60px;
 	-webkit-animation: trapclose 0.3s steps(6, end) 1;
 	-moz-animation: trapclose 0.3s steps(6, end) 1;
 }
@@ -347,37 +345,16 @@ body.theme4 {
 	background-position: -1364px 0;
 }
 .P0 { /* PLAYER */
-	background-position: -1396px 0;
+	background-position: -2529px 0;
 }
-
-@-moz-keyframes player-down {
-	from { background-position: 0px 0px; }
-	to { background-position: -224px 0px; }
-}
-
-@-webkit-keyframes player-down {
-	from { background-position: 0px 0px; }
-	to { background-position: -224px 0px; }
-}
-
-@-moz-keyframes player-up {
-	from { background-position: 0px -64px; }
-	to { background-position: -224px -64px; }
-}
-
-@-webkit-keyframes player-up {
-	from { background-position: 0px -64px; }
-	to { background-position: -224px -64px; }
-}
-
 .P0.up {
-	background: url("../i/dude.png") -32px 100%;
+	background-position: -2465px 0;
 }
 .P0.left { 
-	background: url("../i/dude.png") -2px 100%;
+	background-position: -2432px 0;
 }
 .P0.right {
-	background: url("../i/dude.png") -64px 100%;
+	background-position: -2494px 0;
 }
 .R0 { /* RADIOACTIVE */
 	background-position: -1428px 0;
@@ -431,55 +408,6 @@ body.theme4 {
 	width: 32px;
 	height: 57px;
 	background-repeat: no-repeat;
-}
-/* background ARTIFACTS */
-.dots {
-	position: absolute;
-	width: 65px;
-	height: 58px;
-	background: url("../i/e.png") no-repeat -2400px 100%;
-	z-index: 100;
-}
-.stone {
-	position: absolute;
-	width: 70px;
-	height: 65px;
-	background: url("../i/e.png") no-repeat -2570px 100%;
-}
-.hole {
-	position: absolute;
-	width: 95px;
-	height: 96px;
-	background: url("../i/e.png") no-repeat -2470px 100%;
-}
-/* FIXME: THIS SHOULD BE GENERATED */
-#dots1 {
-	top: 130px;
-	left: 10px;
-}
-#dots2 {
-	top: 300px;
-	left: 710px;
-}
-#stone1 {
-	top: 405px;
-	left: 745px;
-}
-#stone2 {
-	top: 523px;
-	left: 5px;
-}
-#stone3 {
-	top: 61px;
-	left: 1071px;
-}
-#hole1 {
-	top: 123px;
-	left: 789px;
-}
-#hole2 {
-	top: 220px;
-	left: -50px;
 }
 
 .bottomLeftCorner {
